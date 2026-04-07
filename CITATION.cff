@@ -1,1 +1,20 @@
-
+cff-version: 1.2.0
+message: "If you use this software, please cite it using the metadata below."
+type: software
+title: "PyDICE-2023: A Validated Open-Source Python Implementation of the DICE-2023 Integrated Assessment Model"
+authors:
+  - family-names: Islam
+    given-names: Md Moinul
+    affiliation: Rensselaer Polytechnic Institute
+    email: islamm10@rpi.edu
+version: 1.0.0
+date-released: 2025-04-07
+license: MIT
+url: "https://github.com/Mo-in-ul/PyDICE-2023/"
+doi: 10.5281/zenodo.XXXXXXX
+keywords:
+  - DICE-2023
+  - integrated assessment model
+  - climate economics
+  - Python
+  - Numba
