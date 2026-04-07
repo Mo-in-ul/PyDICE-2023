@@ -9,7 +9,6 @@ import seaborn
 from numba import njit
 
 from dice.params import LoadParams, apply_disc_prstp
-from dice.scc import compute_SCC_numba
 
 
 seaborn.set(style='ticks')
