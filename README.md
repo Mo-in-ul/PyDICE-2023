@@ -2,6 +2,7 @@
 
 [![Python](https://img.shields.io/badge/python-3.9%2B-blue.svg)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.19461659.svg)](https://doi.org/10.5281/zenodo.19461659)
 
 A validated Python reimplementation of the **DICE-2023** (Dynamic Integrated Climate-Economy) model by Nordhaus & Barrage (2024). Reproduces the official GAMS reference solution across 10 policy scenarios with welfare gaps below 0.05% for all primary scenarios.
 
