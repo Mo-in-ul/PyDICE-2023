@@ -1,1 +1,10 @@
-
+__pycache__/
+*.py[cod]
+.env
+.venv
+.ipynb_checkpoints/
+__numba_cache__/
+*.nbi
+*.nbc
+.DS_Store
+.vscode/
