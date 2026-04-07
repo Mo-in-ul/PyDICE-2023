@@ -61,7 +61,7 @@ If you use PyDICE-2023 in your research, please cite:
                of the DICE-2023 Integrated Assessment Model},
   year      = {2026},
   publisher = {Zenodo},
-  doi       = {10.5281/zenodo.XXXXXXX},
+  doi       = {10.5281/zenodo.19461660},
   url       = {https://github.com/Mo-in-ul/PyDICE-2023}
 }
 ```
