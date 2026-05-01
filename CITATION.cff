@@ -1,20 +1,55 @@
 cff-version: 1.2.0
-message: "If you use this software, please cite it using the metadata below."
+message: "If you use PyDICE-2023 in your research, please cite it as below."
 type: software
-title: "PyDICE-2023: A Validated Open-Source Python Implementation of the DICE-2023 Integrated Assessment Model"
-authors:
-  - family-names: Islam
-    given-names: Md Moinul
-    affiliation: Rensselaer Polytechnic Institute
-    email: islamm10@rpi.edu
+title: "PyDICE-2023: Validated Python Implementation of DICE-2023"
 version: 1.0.0
-date-released: 2026-04-07
-license: MIT
-url: "https://github.com/Mo-in-ul/PyDICE-2023/"
+date-released: 2025-05-01
 doi: 10.5281/zenodo.19461660
+url: https://github.com/Mo-in-ul/PyDICE-2023
+repository-code: https://github.com/Mo-in-ul/PyDICE-2023
+license: MIT
+abstract: >
+  PyDICE-2023 is a validated open-source Python implementation of
+  DICE-2023 designed for high-throughput programmatic evaluation.
+  The central contribution is a reformulation of the carbon cycle
+  saturation parameter alpha(t) as a co-optimization variable,
+  enabling full Numba JIT compilation. Validated against GAMS
+  reference solutions across nine primary scenarios with welfare
+  gaps below 0.05% and temperature agreement within 0.19°C.
 keywords:
   - DICE-2023
   - integrated assessment model
   - climate economics
+  - social cost of carbon
   - Python
   - Numba
+  - Monte Carlo
+  - reinforcement learning
+authors:
+  - family-names: Islam
+    given-names: Md Moinul
+    orcid: https://orcid.org/0000-0002-2249-8060
+    affiliation: >
+      Department of Mechanical, Aerospace and Nuclear Engineering,
+      Rensselaer Polytechnic Institute, Troy, New York, USA
+    email: islamm10@rpi.edu
+  - family-names: Oehlschlaeger
+    given-names: Matthew A.
+    affiliation: >
+      Department of Mechanical, Aerospace and Nuclear Engineering,
+      Rensselaer Polytechnic Institute, Troy, New York, USA
+preferred-citation:
+  type: article
+  title: >
+    PyDICE-2023: Validated Python Tools for
+    Climate-Economy Integrated Assessment
+  authors:
+    - family-names: Islam
+      given-names: Md Moinul
+      orcid: https://orcid.org/0000-0002-2249-8060
+    - family-names: Oehlschlaeger
+      given-names: Matthew A.
+  journal: Environmental Modelling & Software
+  year: 2025
+  doi: 10.5281/zenodo.19461660
+  url: https://github.com/Mo-in-ul/PyDICE-2023
