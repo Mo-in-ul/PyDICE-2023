@@ -20,7 +20,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install --upgrade pip
-          pip install numpy scipy numba matplotlib seaborn pytest
+          pip install numpy scipy numba matplotlib seaborn pandas pytest
           pip install -e .
 
       - name: Run smoke tests
