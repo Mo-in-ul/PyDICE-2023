@@ -97,22 +97,8 @@ Maximum abatement yields a peak of 1.742°C; the best-effort trajectory achieves
 
 ## Repository Structure
 
-PyDICE-2023/
-├── dice/
-│   ├── notebooks/
-│   │   └── dashboard.ipynb        # interactive scenario dashboard
-│   ├── validation/                # GAMS reference comparison data
-│   ├── init.py
-│   ├── model.py                   # Dice2023Model — main entry point
-│   ├── params.py                  # LoadParams, apply_disc_prstp
-│   └── scc.py                     # Richardson-extrapolated SCC
-├── docs/                          # documentation
-├── benchmark/
-│   └── timing_benchmark.py        # Numba timing benchmark
-├── .gitignore
-├── CITATION.cff
-├── LICENSE
-└── requirements.txt
+<img width="1472" height="840" alt="image" src="https://github.com/user-attachments/assets/425cdf48-0916-4950-9ec9-8e4895c355f5" />
+
 
 ---
 
