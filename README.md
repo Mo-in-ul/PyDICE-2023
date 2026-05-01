@@ -158,7 +158,7 @@ If you use PyDICE-2023 in your research, please cite:
   author  = {Islam, Md Moinul and Oehlschlaeger, Matthew A.},
   journal = {Environmental Modelling \& Software},
   year    = {2025},
-  doi     = {10.5281/zenodo.19461659},
+  doi     = {10.5281/zenodo.19461660},
   url     = {https://github.com/Mo-in-ul/PyDICE-2023}
 }
 ```
