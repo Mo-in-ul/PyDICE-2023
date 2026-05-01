@@ -1,1 +1,9 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.backends.legacy:build"
 
+[project]
+name = "pydice2023"
+version = "0.1.0"
+requires-python = ">=3.10"
+dependencies = ["numpy", "scipy", "numba", "matplotlib", "seaborn"]
