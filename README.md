@@ -40,7 +40,7 @@ pip install -r requirements.txt
 
 ```python
 import numpy as np
-from dice.PyDICE2023_patched import Dice2023Model
+from dice.model import Dice2023Model
 
 # Run the cost-benefit optimal scenario (scenario 9)
 model = Dice2023Model(num_times=81, scenario=9)
@@ -48,7 +48,7 @@ x_opt, output, result_meta = model.run_model()
 
 # Output array columns: EIND, ECO2, CO2PPM, TATM, Y, ...
 # See dump_state() for full column list
-years = np.arange(2020, 2025 + 5 * 81, 5)[:81]
+years = np.arange(2020, 2020 + 5 * 81, 5)[:81]
 model.dump_state(years, output, './results/dice2023_state.csv', scenario=9)
 
 print(f"Peak temperature: {output[:, 3].max():.3f} °C")
@@ -99,15 +99,17 @@ Maximum abatement yields a peak of 1.742°C; the best-effort trajectory achieves
 
 PyDICE-2023/
 ├── dice/
-│   └── PyDICE2023_patched.py   # main implementation
-├── notebooks/
-│   ├── 01_validation.ipynb     # reproduce all validation figures
-│   ├── 02_monte_carlo.ipynb    # 1,000-sample LHS sweep
-│   └── 03_gymnasium_env.ipynb  # RL environment demonstration
+│   ├── notebooks/
+│   │   └── dashboard.ipynb        # interactive scenario dashboard
+│   ├── validation/                # GAMS reference comparison data
+│   ├── init.py
+│   ├── model.py                   # Dice2023Model — main entry point
+│   ├── params.py                  # LoadParams, apply_disc_prstp
+│   └── scc.py                     # Richardson-extrapolated SCC
+├── docs/                          # documentation
 ├── benchmark/
-│   └── timing_benchmark.py     # Numba vs Python timing
-├── results/
-│   └── mc_fan_results.csv      # Monte Carlo SCC trajectories
+│   └── timing_benchmark.py        # Numba timing benchmark
+├── .gitignore
 ├── CITATION.cff
 ├── LICENSE
 └── requirements.txt
@@ -122,8 +124,6 @@ All figures and tables in the companion paper can be reproduced by running the n
 cd notebooks
 jupyter lab
 ```
-
-Run `01_validation.ipynb` first to generate the scenario CSVs that the other notebooks depend on.
 
 ---
 
@@ -141,8 +141,6 @@ The 1,000-sample Latin hypercube sweep over five parameters (ψ₂, ρ, σ_C, σ
 # Action:      [μ(t), S(t)]                     (2-dimensional, continuous)
 # Episodes execute at 4,129 steps per second (19.1 ms per episode)
 ```
-
-See `notebooks/03_gymnasium_env.ipynb` for a full demonstration.
 
 ---
 
@@ -162,6 +160,17 @@ If you use PyDICE-2023 in your research, please cite:
   url     = {https://github.com/Mo-in-ul/PyDICE-2023}
 }
 ```
+
+---
+
+## References
+
+Barrage, L. & Nordhaus, W. D. (2023). *Policies, Projections, and the Social Cost of Carbon: Results from the DICE-2023 Model.* NBER Working Paper 31112.
+
+Barrage, L. & Nordhaus, W. D. (2024). *Policies, Projections, and the Social Cost of Carbon.* PNAS, 121(13).
+
+Millar, R. J. et al. (2017). Emission budgets and pathways consistent with limiting warming to 1.5°C. *Nature Geoscience*, 10, 741–747.
+
 
 ---
 
