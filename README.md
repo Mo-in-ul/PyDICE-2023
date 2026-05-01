@@ -2,7 +2,7 @@
 
 [![Python](https://img.shields.io/badge/python-3.9%2B-blue.svg)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.19461659.svg)](https://doi.org/10.5281/zenodo.19461659)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.19461659.svg)](https://doi.org/10.5281/zenodo.19461660)
 [![Launch Dashboard](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/Mo-in-ul/PyDICE-2023/main?urlpath=voila/render/dice/notebooks/dashboard.ipynb)
 
 **Validated Python implementation of the DICE-2023 integrated assessment model.**
