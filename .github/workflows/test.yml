@@ -27,7 +27,7 @@ jobs:
         run: pytest tests/test_smoke.py -v
 
       - name: Run validation tests (regression)
-        run: pytest tests/test_validation.py -v
+        run: pytest tests/test_validation.py -v -m "not gams"
 
       - name: Run GAMS comparison tests
-        run: pytest tests/test_validation.py -m gams -v
+        run: pytest tests/test_validation.py -v -m gams
