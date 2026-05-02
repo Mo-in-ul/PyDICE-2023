@@ -1,9 +1,13 @@
 [build-system]
-requires = ["setuptools"]
-build-backend = "setuptools.backends.legacy:build"
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "pydice2023"
 version = "0.1.0"
 requires-python = ">=3.10"
 dependencies = ["numpy", "scipy", "numba", "matplotlib", "seaborn", "pandas"]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["dice*"]
