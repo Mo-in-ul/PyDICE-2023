@@ -105,7 +105,7 @@ def LoadParams(num_periods=81, **kwargs):
         return IRF_LHS - IRF_RHS
 
     sol = root(irf_eq, 0.5, method='hybr', options={'xtol': 1e-12})
-    params['a0'] = float(sol.x)
+    params['a0'] = float(sol.x[0])
 
     params['rartp'] = np.exp(params['prstp'] + params['betaclim'] * params['pi']) - 1
     params['sig1'] = params['e1'] / (params['q1'] * (1 - params['miu1']))
