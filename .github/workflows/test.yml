@@ -20,8 +20,14 @@ jobs:
       - name: Install dependencies
         run: |
           pip install --upgrade pip
-          pip install numpy scipy numba matplotlib seaborn pandas pytest
+          pip install numpy scipy numba matplotlib seaborn pandas openpyxl pytest
           pip install -e .
 
       - name: Run smoke tests
         run: pytest tests/test_smoke.py -v
+
+      - name: Run validation tests (regression)
+        run: pytest tests/test_validation.py -v
+
+      - name: Run GAMS comparison tests
+        run: pytest tests/test_validation.py -m gams -v
