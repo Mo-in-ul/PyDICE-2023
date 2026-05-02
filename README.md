@@ -40,7 +40,7 @@ pip install -r requirements.txt
 
 ```python
 import numpy as np
-from dice.model import Dice2023Model
+from dice import Dice2023Model
 
 # Run the cost-benefit optimal scenario (scenario 9)
 model = Dice2023Model(num_times=81, scenario=9)
@@ -61,11 +61,11 @@ print(f"SCC in 2025:      ${output[1, 39]:.2f} / tCO2")
 
 | Scenario number | Description |
 |:-:|:--|
-| 1 | 5% pure rate of social time preference |
-| 2 | 4% pure rate of social time preference |
+| 1 | 1% pure rate of social time preference |
+| 2 | 2% pure rate of social time preference |
 | 3 | 3% pure rate of social time preference |
-| 4 | 2% pure rate of social time preference |
-| 5 | 1% pure rate of social time preference |
+| 4 | 4% pure rate of social time preference |
+| 5 | 5% pure rate of social time preference |
 | 6 | 1.5°C temperature limit (infeasible — best-effort trajectory returned) |
 | 7 | 2.0°C temperature limit |
 | 8 | Paris Agreement prescribed emissions schedule |
