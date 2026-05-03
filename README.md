@@ -4,6 +4,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.19461660.svg)](https://doi.org/10.5281/zenodo.19461660)
 [![Launch Dashboard](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/Mo-in-ul/PyDICE-2023/main?urlpath=voila/render/dice/notebooks/dashboard.ipynb)
+[![CI](https://github.com/Mo-in-ul/PyDICE-2023/actions/workflows/test.yml/badge.svg)](https://github.com/Mo-in-ul/PyDICE-2023/actions/workflows/test.yml)
 
 **Validated Python implementation of the DICE-2023 integrated assessment model.**
 
@@ -107,7 +108,7 @@ Maximum abatement yields a peak of 1.742°C; the best-effort trajectory achieves
 All figures and tables in the companion paper can be reproduced by running the notebooks in order:
 
 ```bash
-cd notebooks
+cd dice/notebooks
 jupyter lab
 ```
 
