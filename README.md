@@ -2,9 +2,11 @@
 
 [![Python](https://img.shields.io/badge/python-3.9%2B-blue.svg)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.19461660.svg)](https://doi.org/10.5281/zenodo.19461660)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20006871.svg)](https://doi.org/10.5281/zenodo.20006871)
 [![Launch Dashboard](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/Mo-in-ul/PyDICE-2023/main?urlpath=voila/render/dice/notebooks/dashboard.ipynb)
 [![CI](https://github.com/Mo-in-ul/PyDICE-2023/actions/workflows/test.yml/badge.svg)](https://github.com/Mo-in-ul/PyDICE-2023/actions/workflows/test.yml)
+
+https://doi.org/10.5281/zenodo.20006871
 
 **Validated Python implementation of the DICE-2023 integrated assessment model.**
 
@@ -143,7 +145,7 @@ If you use PyDICE-2023 in your research, please cite:
   author  = {Islam, Md Moinul and Oehlschlaeger, Matthew A.},
   journal = {Environmental Modelling \& Software},
   year    = {2025},
-  doi     = {10.5281/zenodo.19461660},
+  doi     = {10.5281/zenodo.20006871},
   url     = {https://github.com/Mo-in-ul/PyDICE-2023}
 }
 ```
