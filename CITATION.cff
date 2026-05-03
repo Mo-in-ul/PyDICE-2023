@@ -4,7 +4,7 @@ type: software
 title: "PyDICE-2023: Validated Python Implementation of DICE-2023"
 version: 1.0.0
 date-released: 2025-05-01
-doi: 10.5281/zenodo.19461660
+doi: 10.5281/zenodo.20006871
 url: https://github.com/Mo-in-ul/PyDICE-2023
 repository-code: https://github.com/Mo-in-ul/PyDICE-2023
 license: MIT
@@ -51,5 +51,5 @@ preferred-citation:
       given-names: Matthew A.
   journal: Environmental Modelling & Software
   year: 2025
-  doi: 10.5281/zenodo.19461660
+  doi: 10.5281/zenodo.20006871
   url: https://github.com/Mo-in-ul/PyDICE-2023
