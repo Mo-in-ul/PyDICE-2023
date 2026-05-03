@@ -6,7 +6,6 @@
 [![Launch Dashboard](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/Mo-in-ul/PyDICE-2023/main?urlpath=voila/render/dice/notebooks/dashboard.ipynb)
 [![CI](https://github.com/Mo-in-ul/PyDICE-2023/actions/workflows/test.yml/badge.svg)](https://github.com/Mo-in-ul/PyDICE-2023/actions/workflows/test.yml)
 
-https://doi.org/10.5281/zenodo.20006871
 
 **Validated Python implementation of the DICE-2023 integrated assessment model.**
 
