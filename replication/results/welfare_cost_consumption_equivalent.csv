@@ -1,0 +1,9 @@
+damage_key,damage_name,welfare_cost_ce_pct,welfare_cost_ce_usd_tn,pv_consumption_usd_tn
+hs_high,Howard-Sterner High,0.0939,10.04,10685.4
+kahn,Kahn et al. (2021),0.0217,2.33,10751.1
+hs_central,Howard-Sterner Central,0.0185,1.99,10756.4
+nordhaus_2023,Nordhaus DICE-2023,0.0072,0.77,10780.8
+weitzman,Weitzman (2012),0.0049,0.53,10811.1
+nordhaus_2016,Nordhaus DICE-2016,0.0037,0.4,10790.6
+hs_low,Howard-Sterner Low,0.0037,0.4,10790.6
+dietz_stern,Dietz-Stern (2015),0.003,0.33,10792.4
