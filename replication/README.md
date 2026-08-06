@@ -77,7 +77,8 @@ estimate of the ramp multiplier.
 
 ## Citation / DOI
 
-Archived at Zenodo: DOI [insert release DOI].
+Archived at Zenodo: DOI [10.5281/zenodo.21816356
+Aug 6, 2026].
 
 ## License
 
