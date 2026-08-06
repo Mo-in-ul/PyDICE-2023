@@ -1,0 +1,11 @@
+damage_key,damage_name,pulse_size,SCC_raw,SCC_rich,SCC_rich_2side,agree_pct
+hs_high,Howard-Sterner High,1e-05,134.837,134.837,134.837,0.0
+hs_high,Howard-Sterner High,5e-06,134.837,134.8377,134.8374,0.0002
+hs_high,Howard-Sterner High,2.5e-06,134.8373,134.838,134.8378,0.0001
+hs_high,Howard-Sterner High,1.25e-06,134.8377,134.8364,134.8368,0.0003
+hs_high,Howard-Sterner High,6.25e-07,134.837,134.8344,134.8353,0.0007
+dietz_stern,Dietz-Stern (2015),1e-05,37.925,37.9253,37.9252,0.0003
+dietz_stern,Dietz-Stern (2015),5e-06,37.9251,37.9258,37.9256,0.0005
+dietz_stern,Dietz-Stern (2015),2.5e-06,37.9255,37.9275,37.9268,0.0018
+dietz_stern,Dietz-Stern (2015),1.25e-06,37.9265,37.9278,37.9274,0.0011
+dietz_stern,Dietz-Stern (2015),6.25e-07,37.9271,37.9218,37.9236,0.0047
