@@ -1,0 +1,49 @@
+damage_key,damage_name,year,T_opt,D_T,dD_dT,d2D_dT2
+nordhaus_2023,Nordhaus DICE-2023,2025,1.425,0.7044,0.0099,0.0069
+nordhaus_2023,Nordhaus DICE-2023,2030,1.546,0.8288,0.0107,0.0069
+nordhaus_2023,Nordhaus DICE-2023,2040,1.749,1.0606,0.0121,0.0069
+nordhaus_2023,Nordhaus DICE-2023,2050,1.935,1.2984,0.0134,0.0069
+nordhaus_2023,Nordhaus DICE-2023,2075,2.341,1.8998,0.0162,0.0069
+nordhaus_2023,Nordhaus DICE-2023,2100,2.591,2.3278,0.018,0.0069
+nordhaus_2016,Nordhaus DICE-2016,2025,1.425,0.5425,0.0076,0.0053
+nordhaus_2016,Nordhaus DICE-2016,2030,1.55,0.6416,0.0083,0.0053
+nordhaus_2016,Nordhaus DICE-2016,2040,1.764,0.8312,0.0094,0.0053
+nordhaus_2016,Nordhaus DICE-2016,2050,1.965,1.0309,0.0105,0.0053
+nordhaus_2016,Nordhaus DICE-2016,2075,2.42,1.564,0.0129,0.0053
+nordhaus_2016,Nordhaus DICE-2016,2100,2.747,2.0144,0.0147,0.0053
+hs_low,Howard-Sterner Low,2025,1.425,0.5425,0.0076,0.0053
+hs_low,Howard-Sterner Low,2030,1.55,0.6416,0.0083,0.0053
+hs_low,Howard-Sterner Low,2040,1.764,0.8312,0.0094,0.0053
+hs_low,Howard-Sterner Low,2050,1.965,1.0309,0.0105,0.0053
+hs_low,Howard-Sterner Low,2075,2.42,1.564,0.0129,0.0053
+hs_low,Howard-Sterner Low,2100,2.747,2.0144,0.0147,0.0053
+hs_central,Howard-Sterner Central,2025,1.425,1.0462,0.0147,0.0103
+hs_central,Howard-Sterner Central,2030,1.545,1.2293,0.0159,0.0103
+hs_central,Howard-Sterner Central,2040,1.728,1.5386,0.0178,0.0103
+hs_central,Howard-Sterner Central,2050,1.888,1.8367,0.0195,0.0103
+hs_central,Howard-Sterner Central,2075,2.206,2.507,0.0227,0.0103
+hs_central,Howard-Sterner Central,2100,2.323,2.78,0.0239,0.0103
+hs_high,Howard-Sterner High,2025,1.434,2.0797,0.029,0.0202
+hs_high,Howard-Sterner High,2030,1.554,2.4434,0.0314,0.0202
+hs_high,Howard-Sterner High,2040,1.715,2.9757,0.0347,0.0202
+hs_high,Howard-Sterner High,2050,1.814,3.3312,0.0367,0.0202
+hs_high,Howard-Sterner High,2075,1.929,3.7675,0.0391,0.0202
+hs_high,Howard-Sterner High,2100,1.914,3.7058,0.0387,0.0202
+weitzman,Weitzman (2012),2025,1.434,0.4947,0.0071,0.0057
+weitzman,Weitzman (2012),2030,1.558,0.5866,0.0078,0.0062
+weitzman,Weitzman (2012),2040,1.765,0.7622,0.0092,0.0074
+weitzman,Weitzman (2012),2050,1.955,0.9508,0.0108,0.0091
+weitzman,Weitzman (2012),2075,2.362,1.4789,0.0156,0.0155
+weitzman,Weitzman (2012),2100,2.608,1.9168,0.0202,0.0218
+dietz_stern,Dietz-Stern (2015),2025,1.425,0.5067,0.0071,0.0049
+dietz_stern,Dietz-Stern (2015),2030,1.551,0.5998,0.0077,0.0049
+dietz_stern,Dietz-Stern (2015),2040,1.769,0.779,0.0088,0.0049
+dietz_stern,Dietz-Stern (2015),2050,1.973,0.9688,0.0098,0.0049
+dietz_stern,Dietz-Stern (2015),2075,2.443,1.4814,0.012,0.0048
+dietz_stern,Dietz-Stern (2015),2100,2.793,1.9312,0.0137,0.0047
+kahn,Kahn et al. (2021),2025,1.425,1.1172,0.0157,0.011
+kahn,Kahn et al. (2021),2030,1.545,1.3127,0.017,0.011
+kahn,Kahn et al. (2021),2040,1.725,1.6361,0.019,0.011
+kahn,Kahn et al. (2021),2050,1.88,1.9436,0.0207,0.011
+kahn,Kahn et al. (2021),2075,2.181,2.6168,0.024,0.011
+kahn,Kahn et al. (2021),2100,2.274,2.8438,0.025,0.011
