@@ -43,8 +43,9 @@ python run_all.py
 
 This runs `run_experiment.py` (writing all CSVs into `results/`), then builds
 the three figures (`fig_mechanism.pdf`, `fig_wedge.pdf`, `fig_scatter.pdf`).
-Approximate runtime: [XX] minutes on [machine]. To run the pieces separately,
-run `python run_experiment.py` first, then each `figs/fig_*.py`.
+Approximate runtime: [XX] minutes on Mac mini (2024), Apple M4, 24 GB RAM. 
+To run the pieces separately, run `python run_experiment.py` first, then 
+each `figs/fig_*.py`.
 
 ## What produces each table and figure
 
