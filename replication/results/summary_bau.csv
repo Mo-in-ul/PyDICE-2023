@@ -1,0 +1,9 @@
+damage_key,damage_name,ecs_label,ecs_val,T_2030_bau,T_2050_bau,T_2100_bau,T_peak_bau,welfare_bau,damfrac_2050_bau,damfrac_2100_bau,status,timestamp
+nordhaus_2023,Nordhaus DICE-2023,ecs_central,3.0025,1.572,2.078,3.43,13.215,6434.0094,1.4969,4.0795,ok,2026-08-07T14:58:06
+nordhaus_2016,Nordhaus DICE-2016,ecs_central,3.0025,1.573,2.078,3.433,13.389,6525.4792,1.1532,3.1459,ok,2026-08-07T14:58:06
+hs_low,Howard-Sterner Low,ecs_central,3.0025,1.573,2.078,3.433,13.389,6525.4792,1.1532,3.1459,ok,2026-08-07T14:58:06
+hs_central,Howard-Sterner Central,ecs_central,3.0025,1.572,2.077,3.425,12.771,6225.5638,2.222,6.0423,ok,2026-08-07T14:58:06
+hs_high,Howard-Sterner High,ecs_central,3.0025,0.0,0.0,0.0,0.0,-6275.91,0.0,0.0,ok,2026-08-07T14:58:06
+weitzman,Weitzman (2012),ecs_central,3.0025,1.573,2.078,3.432,10.766,5359.454,1.0908,4.6823,ok,2026-08-07T14:58:06
+dietz_stern,Dietz-Stern (2015),ecs_central,3.0025,1.573,2.078,3.433,13.576,6571.4994,1.074,2.9036,ok,2026-08-07T14:58:06
+kahn,Kahn et al. (2021),ecs_central,3.0025,1.572,2.077,3.424,12.661,6178.6507,2.3727,6.4491,ok,2026-08-07T14:58:06
