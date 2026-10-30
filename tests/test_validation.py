@@ -256,12 +256,25 @@ def test_gams_miu_match(gams_file, scen):
     )
 
 
+# SCC cases that are not expected to match GAMS:
+#   7 (2°C): the GAMS SCC includes the shadow price of the binding temperature limit.
+#   1, 2 (1% and 2% discounting): the SCC differs even with the GAMS control path
+#        (~50% and ~5% in 2025); open issue.
+_SCC_XFAIL = {
+    7: "GAMS SCC includes the shadow price of the binding 2°C limit",
+    1: "Open issue: low-discount SCC differs from GAMS even with GAMS controls",
+    2: "Open issue: low-discount SCC differs from GAMS even with GAMS controls",
+}
+_SCC_CASES = [
+    pytest.param(f, s, marks=pytest.mark.xfail(reason=_SCC_XFAIL[s], strict=False)) if s in _SCC_XFAIL else (f, s)
+    for f, s in GAMS_FILE_MAP.items()
+]
+
+
 @pytest.mark.gams
-@pytest.mark.xfail(reason="Open issue: pulse-based SCC is ~13-20% below the GAMS shadow-price "
-                          "SCC in 2025; under investigation", strict=False)
-@pytest.mark.parametrize("gams_file,scen", GAMS_FILE_MAP.items())
+@pytest.mark.parametrize("gams_file,scen", _SCC_CASES)
 def test_gams_scc_match(gams_file, scen):
-    """PyDICE SCC at period 2 (2025) matches GAMS within 5 USD/tCO2."""
+    """PyDICE SCC at period 2 (2025) matches GAMS within 1% (alpha responds to the pulse, as in GAMS)."""
     gams = _load_gams_xlsx(gams_file)
     py   = load_python_output(scen)
 
@@ -277,7 +290,7 @@ def test_gams_scc_match(gams_file, scen):
         pytest.skip("Not enough SCC periods")
 
     diff = abs(float(py_scc[1]) - float(gams_scc[1]))
-    assert diff < 5.0, (
+    assert diff < 0.01 * abs(float(gams_scc[1])), (
         f"Scen {scen} ({gams_file}): SCC_2025 PyDICE={py_scc[1]:.2f}, "
-        f"GAMS={gams_scc[1]:.2f}, diff={diff:.2f} > 5 USD/tCO2"
+        f"GAMS={gams_scc[1]:.2f}, diff={diff:.2f} > 1%"
     )

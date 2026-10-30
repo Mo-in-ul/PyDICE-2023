@@ -2,7 +2,7 @@ import numpy as np
 import os
 import csv
 import time
-from scipy.optimize import minimize, brentq
+from scipy.optimize import minimize
 from matplotlib import pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
 import seaborn
@@ -432,7 +432,24 @@ def recoverAllVars_numba(x, num_periods, tstep, dk, gama, eco2Param, sigma, elan
     return output
 
 
-def recoverAllVars(x, params):
+def recoverAllVars(x, params, scc_alpha_response=True):
+    """
+    Rebuild all reported variables from x = [MIU, S, alpha]. The SCC column (39) is
+    recomputed with dice.scc.compute_SCC; by default alpha re-adjusts to each emissions
+    pulse through the IRF condition, which is how the GAMS SCC is defined.
+    """
+    output = _recover_core(x, params)
+    if not np.any(output):
+        return output
+    from dice.scc import compute_SCC          # lazy import: dice.scc imports this module
+    N = params['num_periods']
+    MIU = np.zeros(N + 1); S = np.zeros(N + 1); alpha = np.zeros(N + 1)
+    MIU[1:] = x[:N]; S[1:] = x[N:2 * N]; alpha[1:] = x[2 * N:]
+    output[:, 39] = compute_SCC(params, MIU, S, alpha, alpha_response=scc_alpha_response)[1:]
+    return output
+
+
+def _recover_core(x, params):
     num_periods = params['num_periods']
     return recoverAllVars_numba(
         x, num_periods, params['tstep'], params['dk'], params['gama'], params['eco2Param'], params['sigma'],
@@ -578,56 +595,12 @@ class Dice2023Model:
 
     def solve_irf_alpha(self, MIU, S):
         """
-        For fixed control and savings paths (1-based arrays of length N+1),
-        solve alpha(t), t = 1..N, so that the IRF condition holds in every period.
-        Returns (alpha array of length N+1, success flag, max |IRF residual|).
-        Periods where the solution would fall below AlphaLowerBound (possible in
-        the far future under large net-negative emissions) are held at the bound,
-        matching the clamp in the forward model; they are excluded from the
-        residual and do not count as failures.
+        For fixed control and savings paths (1-based arrays of length N+1), solve
+        alpha(t) so that the IRF condition holds in every period. Thin wrapper around
+        dice.irf.solve_alpha. Returns (alpha, success flag, max |IRF residual|).
         """
-        p = self.params
-        N = self.num_periods
-        prob = DiceFunc(N, p, TempUpperConstraint=20.0,
-                        TempLowerConstraint=self.TempLowerConstraint)
-        MIU_x = np.asarray(MIU, dtype=np.float64)[1:N + 1]
-        S_x   = np.asarray(S,   dtype=np.float64)[1:N + 1]
-
-        def resid(a):
-            return prob.irf_residual(np.concatenate([MIU_x, S_x, a]))
-
-        # The residual in period t depends only on alpha(1..t), so alpha can be
-        # solved one period at a time with a bracketed scalar root.
-        a = np.full(N, p['a0'])
-        ok = True
-        at_bound = np.zeros(N, dtype=bool)
-        lo, hi = max(p['AlphaLowerBound'], 1e-3), 50.0
-        for k in range(1, N):
-            def g(val, k=k):
-                a[k] = val
-                return resid(a)[k]
-            try:
-                g_lo, g_hi = g(lo), g(hi)
-                if np.sign(g_lo) == np.sign(g_hi):
-                    # IRF residual = LHS - RHS(alpha); RHS increases with alpha.
-                    # g(lo) < 0 means even the smallest allowed alpha is too large.
-                    if g_lo < 0:
-                        a[k] = lo
-                        at_bound[k] = True
-                    else:
-                        ok = False
-                        a[k] = hi
-                else:
-                    a[k] = brentq(g, lo, hi, xtol=1e-12)
-            except (ValueError, FloatingPointError):
-                ok = False
-                a[k] = a[k - 1]
-        alpha = np.zeros(N + 1)
-        alpha[1:] = a
-        alpha[1] = p['a0']
-        r = resid(a)
-        max_res = float(np.max(np.abs(r[~at_bound]))) if np.any(~at_bound) else 0.0
-        return alpha, ok, max_res
+        from dice.irf import solve_alpha      # lazy import: dice.irf imports this module
+        return solve_alpha(self.params, MIU, S)
 
     # ── NEW METHOD 2 ──────────────────────────────────────────────────────────
     def _run_best_effort(self, temp_limit, feasibility_info):
@@ -932,8 +905,10 @@ class Dice2023Model:
         print("Optimized Alpha range:", x_opt[2*self.num_periods:].min(),          x_opt[2*self.num_periods:].max())
         print("IRF max residual:",      np.max(np.abs(prob.irf_residual(x_opt))))
 
-        # ── Changed from `return x_opt, output, None` ────────────────────
-        result_meta = {'infeasible': False, 'scenario': self.scenario}
+        result_meta = {'infeasible': False, 'scenario': self.scenario,
+                       'success': bool(res.success), 'message': str(res.message),
+                       'iterations': int(getattr(res, 'nit', -1)),
+                       'irf_max_residual': float(np.max(np.abs(prob.irf_residual(x_opt))))}
         return x_opt, output, result_meta
 
     def dump_parameters(self):
@@ -1073,21 +1048,7 @@ def display_scenarios():
 
 
 if __name__ == "__main__":
+    # Pick a scenario, optimise it, save results and plots, then compare with GAMS.
+    from dice.compare import run_scenario
     scenario = display_scenarios()
-    model = Dice2023Model(num_times=81, scenario=scenario)
-    model.dump_parameters()
-    years = np.arange(
-        model.params['yr0'],
-        model.params['yr0'] + model.params['tstep'] * model.num_periods,
-        model.params['tstep']
-    )
-    x_opt, output, result_meta = model.run_model()
-
-    if result_meta.get('infeasible'):
-        print(f"\n[Note] Scenario returned infeasible result.")
-        print(f"  Best-effort peak temperature : {result_meta['best_effort_peak_temp']:.3f}°C")
-        print(f"  Peak year                    : {result_meta['best_effort_peak_year']}")
-
-    model.dump_state(years, output, "./results/dice2023_state.csv", scenario)
-    model.plot_state_to_file(
-        f"./results/dice2023_plots_scen{scenario}.pdf", years, output, x_opt)
+    run_scenario(scenario, compare=True, show=True)
