@@ -3,7 +3,7 @@
 [![Python](https://img.shields.io/badge/python-3.9%2B-blue.svg)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20006871.svg)](https://doi.org/10.5281/zenodo.20006871)
-[![Launch Dashboard](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/Mo-in-ul/PyDICE-2023/v2.1?urlpath=voila/render/dice/notebooks/dashboard.ipynb)
+[![Launch Dashboard](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/Mo-in-ul/PyDICE-2023/v2.2?urlpath=voila/render/dice/notebooks/dashboard.ipynb)
 [![CI](https://github.com/Mo-in-ul/PyDICE-2023/actions/workflows/test.yml/badge.svg)](https://github.com/Mo-in-ul/PyDICE-2023/actions/workflows/test.yml)
 
 
