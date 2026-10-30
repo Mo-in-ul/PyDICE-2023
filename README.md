@@ -20,7 +20,8 @@ PyDICE-2023 is an open-source Python reimplementation of DICE-2023 (Barrage & No
 - Welfare within 0.03% of GAMS; given the GAMS control paths, temperatures identical to GAMS
 - 1,000-sample Monte Carlo uncertainty analysis over economic and physical parameters
 - Gymnasium-compatible reinforcement learning environment
-- Richardson-extrapolated finite-difference Social Cost of Carbon
+- Richardson-extrapolated finite-difference Social Cost of Carbon, with α responding to the pulse as in GAMS
+- Automatic comparison of every run with the GAMS reference solution (summary table and figures)
 - Explicit infeasibility detection for the 1.5°C scenario with best-effort trajectory
 
 ---
@@ -106,9 +107,33 @@ free disposal of capital. Replaying the GAMS 1.5°C emissions path through DFAIR
 solved from the IRF condition period by period, reproduces the GAMS temperatures exactly, so
 the carbon cycle is not the source of the gap.
 
-**Known open issue.** The pulse-based SCC in 2025 is 13–20% below the GAMS shadow-price
-SCC in the unconstrained runs (for example $51 vs $59 in the cost-benefit run). This is unaffected by the corrections
-above and is under investigation.
+**Social cost of carbon.** The SCC is computed from a small emissions pulse, with α(t) re-solved
+from the IRF condition so the carbon cycle responds to the pulse. This is what the GAMS SCC measures,
+and it reproduces the GAMS values in 2025 to within 0.2% for the cost-benefit, Paris, baseline, 3%, 4%
+and 5% runs (for example $59.07 vs $59.07 in the cost-benefit run). Holding α fixed, as earlier
+versions did, understates the GAMS SCC by about 13–20%; that variant is still available with
+`compute_SCC(..., alpha_response=False)`. Two cases differ by design or remain open:
+
+- With a binding temperature limit (2°C, 1.5°C), the GAMS SCC includes the shadow price of the limit,
+  while PyDICE measures the welfare cost of emissions with controls held fixed.
+- At 1% and 2% discounting the 2025 SCC is above GAMS (about 37% and 3%), even when evaluated on the
+  GAMS control path. This is under investigation.
+
+## Comparing a run with GAMS
+
+Run `python -m dice`, pick a scenario, and PyDICE optimises it, saves results to `./results`, and then
+compares it with the GAMS reference solution. From Python or a notebook:
+
+```python
+from dice import run_scenario
+results = run_scenario(9)        # cost-benefit optimal
+results['summary']               # welfare gap, temperature gaps, control rates, SCC, ...
+```
+
+The comparison prints a summary, runs a model-only check (the GAMS control and savings paths fed through
+the PyDICE forward model, which separates equation differences from optimiser differences), and saves
+`gams_comparison_scen<N>.pdf` plus PNG and CSV files: PyDICE vs GAMS for twelve key variables, and their
+differences.
 
 ---
 
