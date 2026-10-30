@@ -51,7 +51,7 @@ def recoverAllVars_numba(x, num_periods, tstep, dk, gama, eco2Param, sigma, elan
     DAMAGES = YGROSS * DAMFRAC
     CPRICE = PBACKTIME * (MIU ** (expcost2 - 1.0))
     EIND = sigma * (eco2Param * (K ** gama)) * (1.0 - MIU)
-    ECO2 = EIND + eland
+    ECO2 = EIND + eland * (1.0 - MIU)   # DICE-2023: control rate also applies to land CO2
     ECO2E = ECO2 + CO2E_GHGabateB * (1.0 - MIU)
     FORC = fco22x * np.log(safe_MAT / mateq) / np.log(2.0) + F_Misc + F_GHGab_arr
     FORC_CO2 = fco22x * np.log(safe_MAT / mateq) / np.log(2.0)
