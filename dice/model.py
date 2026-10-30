@@ -17,8 +17,14 @@ seaborn.set(style='ticks')
 def diceForward_numba(i, MIU, S, alpha, CCATOT, K, I, F_GHGabate, RES0, RES1, RES2, RES3, TBOX1, TBOX2,
                       tstep, dk, gama, eco2Param, sigma, eland, cost1tot, expcost2, miuup, sLBounds, sUBounds,
                       AlphaLowerBound, Fcoef1, Fcoef2, CO2E_GHGabateB, emshare0, emshare1, emshare2, emshare3,
-                      tau0, tau1, tau2, tau3, mateq, fco22x, F_Misc, teq1, teq2, d1, d2, a1, a2base, a3, 
-                      pulse_GtCO2_per_year):
+                      tau0, tau1, tau2, tau3, mateq, fco22x, F_Misc, teq1, teq2, d1, d2, a1, a2base, a3,
+                      pulse_GtCO2_per_year, ECO2_prev, MIU_prev_i):
+    # ECO2_prev   : total CO2 emissions of period i-1 (GtCO2/yr, incl. any pulse)
+    # MIU_prev_i  : clamped control rate of period i-1
+    # GAMS DICE-2023 timing (verified against the GAMS reference output):
+    #   CCATOT(t+1)     = CCATOT(t) + ECO2(t)*tstep/3.666
+    #   F_GHGabate(t+1) = Fcoef2*F_GHGabate(t) + Fcoef1*CO2E_GHGabateB(t)*(1-MIU(t))
+    #   RES_j(t+1) uses alpha(t+1) and ECO2(t+1)
 
     # Clamp controls
     MIU_i = min(max(MIU[i], 0.0), miuup[i])
@@ -31,14 +37,15 @@ def diceForward_numba(i, MIU, S, alpha, CCATOT, K, I, F_GHGabate, RES0, RES1, RE
     # Calculate CURRENT period gross output
     YGROSS = eco2Param[i] * (K ** gama)
     
-    # Calculate CURRENT period emissions with CURRENT MIU
-    ECO2 = (sigma[i] * YGROSS ) * (1.0 - MIU_i) + eland[i]
-    
-    # CORRECTED: Update CCATOT with current period emissions
-    CCATOT = CCATOT + (ECO2 + pulse_GtCO2_per_year[i]) * (tstep / 3.667)
-    
-    # CORRECTED: F_GHGabate uses current period values
-    F_GHGabate = Fcoef2 * F_GHGabate + Fcoef1 * CO2E_GHGabateB[i] * (1.0 - MIU_i)
+    # Total CO2 emissions: in DICE-2023 the control rate applies to land-use CO2 as well
+    #   ECO2(t) = (sigma(t)*YGROSS(t) + eland(t)) * (1 - MIU(t))
+    ECO2 = (sigma[i] * YGROSS + eland[i]) * (1.0 - MIU_i)
+
+    # Cumulative emissions accumulate the PREVIOUS period's emissions (GAMS timing)
+    CCATOT = CCATOT + ECO2_prev * (tstep / 3.666)
+
+    # Other abatable GHG forcing uses the PREVIOUS period's base emissions and control rate
+    F_GHGabate = Fcoef2 * F_GHGabate + Fcoef1 * CO2E_GHGabateB[i - 1] * (1.0 - MIU_prev_i)
     
     # Carbon boxes - use same emissions as CCATOT for consistency
     total_flow = ECO2 + pulse_GtCO2_per_year[i]
@@ -70,11 +77,12 @@ def diceForward_numba(i, MIU, S, alpha, CCATOT, K, I, F_GHGabate, RES0, RES1, RE
     C = Y - I
     
     if not (np.isfinite(MAT) and np.isfinite(TATM) and np.isfinite(C) and np.isfinite(YGROSS)):
-        return np.array([np.nan] * 18, dtype=np.float64)
+        return np.array([np.nan] * 20, dtype=np.float64)
 
     
     return np.array([C, CCATOT, K, I, F_GHGabate, RES0, RES1, RES2, RES3,
-                     TBOX1, TBOX2, MAT, TATM, Y, YNET, YGROSS, DAMFRAC, ABATECOST], dtype=np.float64)
+                     TBOX1, TBOX2, MAT, TATM, Y, YNET, YGROSS, DAMFRAC, ABATECOST,
+                     total_flow, MIU_i], dtype=np.float64)
 
 
 
@@ -127,11 +135,18 @@ def diceTrajectory_numba(MIU, S, alpha, num_periods, tstep, dk, gama, eco2Param,
     MAT[1] = mat0
     # DO NOT mutate alpha here (Numba broadcast risk) — set alpha[1]=a0 in Python wrapper
 
+    # Period-1 emissions and control rate, needed by the lagged CCATOT and F_GHGabate updates
+    MIU_prev = min(max(MIU[1], 0.0), miuup[1])
+    ECO2_prev = (sigma[1] * YGROSS[1] + eland[1]) * (1.0 - MIU_prev) + pulse_GtCO2_per_year[1]
+
     for i in range(2, num_periods + 1):
         result = diceForward_numba(i, MIU, S, alpha, CCATOT[i - 1], K[i - 1], I, F_GHGabate, RES0, RES1, RES2, RES3, TBOX1, TBOX2,
                                    tstep, dk, gama, eco2Param, sigma, eland, cost1tot, expcost2, miuup, sLBounds, sUBounds,
                                    AlphaLowerBound, Fcoef1, Fcoef2, CO2E_GHGabateB, emshare0, emshare1, emshare2, emshare3,
-                                   tau0, tau1, tau2, tau3, mateq, fco22x, F_Misc, teq1, teq2, d1, d2, a1, a2base, a3, pulse_GtCO2_per_year)
+                                   tau0, tau1, tau2, tau3, mateq, fco22x, F_Misc, teq1, teq2, d1, d2, a1, a2base, a3, pulse_GtCO2_per_year,
+                                   ECO2_prev, MIU_prev)
+        ECO2_prev = result[18]
+        MIU_prev = result[19]
 
         if np.any(np.isnan(result)):
             # Return NaNs in all outputs so callers can detect failure
@@ -322,9 +337,9 @@ def recoverAllVars_numba(x, num_periods, tstep, dk, gama, eco2Param, sigma, elan
     CACC = CCATOT - (MAT - mateq)
     DAMAGES = YGROSS * DAMFRAC
     CPRICE = PBACKTIME * (MIU ** (expcost2 - 1.0))
-    # Separate EIND vs ECO2 (old logic still uses MIU on total in the forward, but for reporting split here)
+    # Report EIND and ECO2 consistently with the forward model (control rate applies to land CO2 too)
     EIND = sigma * (eco2Param * (K ** gama)) * (1.0 - MIU)
-    ECO2 = EIND + eland 
+    ECO2 = EIND + eland * (1.0 - MIU)
     ECO2E = ECO2 + CO2E_GHGabateB * (1.0 - MIU)
     FORC = fco22x * np.log(safe_MAT / mateq) / np.log(2.0) + F_Misc + F_GHGab_arr
     FORC_CO2 = fco22x * np.log(safe_MAT / mateq) / np.log(2.0)
