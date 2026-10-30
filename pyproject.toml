@@ -11,3 +11,6 @@ dependencies = ["numpy", "scipy", "numba", "matplotlib", "seaborn", "pandas", "o
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["dice*"]
+
+[tool.pytest.ini_options]
+markers = ["gams: slow comparison against the GAMS reference solutions"]
