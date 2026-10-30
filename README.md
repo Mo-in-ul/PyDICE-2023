@@ -17,10 +17,11 @@ PyDICE-2023 is an open-source Python reimplementation of DICE-2023 (Barrage & No
 
 - Full Numba JIT compilation — 0.035 ms per trajectory, ~28,500 evaluations per second
 - Validated against GAMS reference solutions across nine primary policy scenarios
-- Welfare gaps below 0.05% and temperature agreement within 0.19°C against GAMS
+- Welfare within 0.03% of GAMS; given the GAMS control paths, temperatures identical to GAMS
 - 1,000-sample Monte Carlo uncertainty analysis over economic and physical parameters
 - Gymnasium-compatible reinforcement learning environment
-- Richardson-extrapolated finite-difference Social Cost of Carbon
+- Richardson-extrapolated finite-difference Social Cost of Carbon, with α responding to the pulse as in GAMS
+- Automatic comparison of every run with the GAMS reference solution (summary table and figures)
 - Explicit infeasibility detection for the 1.5°C scenario with best-effort trajectory
 
 ---
@@ -77,23 +78,62 @@ print(f"SCC in 2025:      ${output[1, 39]:.2f} / tCO2")
 ---
 ## Validation Summary
 
-Validation against GAMS reference solutions (Barrage & Nordhaus, 2023) across nine primary scenarios:
+Validation against GAMS reference solutions (Barrage & Nordhaus, 2023) across nine primary scenarios.
+Welfare gap is (PyDICE − GAMS) / |GAMS| using the PyDICE welfare function on each consumption path;
+ΔT is the largest temperature difference over 2020–2215 between the PyDICE optimum and the GAMS solution.
 
 | Scenario | Welfare gap (%) | Max ΔT (°C) | Iterations | Max IRF residual |
 |:--|--:|--:|--:|--:|
-| cb_optimal | −0.018 | 0.089 | 75 | 7.84 × 10⁻¹⁰ |
-| 2°C limit | −0.031 | 0.159 | 64 | 9.79 × 10⁻⁷ |
-| Paris | −0.018 | 0.016 | 57 | 5.26 × 10⁻⁶ |
-| Baseline | −0.029 | 0.025 | 57 | 3.83 × 10⁻⁸ |
-| 1% discount | −0.022 | 0.094 | 80 | 5.08 × 10⁻¹⁰ |
-| 2% discount | −0.045 | 0.149 | 90 | 9.25 × 10⁻⁷ |
-| 3% discount | −0.035 | 0.087 | 90 | 2.96 × 10⁻⁸ |
-| 4% discount | −0.023 | 0.064 | 91 | 1.72 × 10⁻⁷ |
-| 5% discount | −0.017 | 0.181 | 106 | 1.21 × 10⁻⁴ |
+| cb_optimal | 0.000 | 0.000 | 71 | 3.00 × 10⁻⁷ |
+| 2°C limit | +0.001 | 0.001 | 63 | 9.64 × 10⁻⁷ |
+| Paris | 0.000 | 0.000 | 68 | 2.16 × 10⁻⁹ |
+| Baseline | 0.000 | 0.000 | 56 | 3.80 × 10⁻⁷ |
+| 1% discount | +0.030 | 0.001 | 103 | 1.22 × 10⁻⁴ |
+| 2% discount | +0.008 | 0.003 | 136 | 3.83 × 10⁻⁶ |
+| 3% discount | 0.000 | 0.009 | 87 | 2.95 × 10⁻⁸ |
+| 4% discount | 0.000 | 0.000 | 83 | 1.17 × 10⁻⁷ |
+| 5% discount | +0.002 | 0.168 | 79 | 1.66 × 10⁻⁸ |
 
-The 1.5°C scenario is physically infeasible under sequential DFAIR dynamics.
-Maximum abatement yields a peak of 1.742°C; the best-effort trajectory achieves 1.628°C
-(irreducible gap: 0.114°C). See the companion paper for full diagnostics.
+Given the GAMS control and savings paths, the PyDICE forward model reproduces the GAMS
+temperature path to within 0.002 °C in every scenario above. The remaining ΔT for 5% discounting
+comes from the far tail (after about 2140), where the objective is nearly flat: GAMS stops
+below the control-rate ceiling, while PyDICE goes to the ceiling and attains slightly higher welfare.
+
+**1.5°C scenario.** No control path meets 1.5°C while capital accumulation holds with equality:
+maximum abatement with the lowest allowed savings rate peaks at 1.632°C, and the best-effort
+trajectory reaches 1.633°C. The GAMS reference solution reaches 1.5°C only because its capital
+stock falls from 295 to about 2 in 2025, far below the depreciation path, which amounts to
+free disposal of capital. Replaying the GAMS 1.5°C emissions path through DFAIR, with α(t)
+solved from the IRF condition period by period, reproduces the GAMS temperatures exactly, so
+the carbon cycle is not the source of the gap.
+
+**Social cost of carbon.** The SCC is computed from a small emissions pulse, with α(t) re-solved
+from the IRF condition so the carbon cycle responds to the pulse. This is what the GAMS SCC measures,
+and it reproduces the GAMS values in 2025 to within 0.2% for the cost-benefit, Paris, baseline, 3%, 4%
+and 5% runs (for example $59.07 vs $59.07 in the cost-benefit run). Holding α fixed, as earlier
+versions did, understates the GAMS SCC by about 13–20%; that variant is still available with
+`compute_SCC(..., alpha_response=False)`. Two cases differ by design or remain open:
+
+- With a binding temperature limit (2°C, 1.5°C), the GAMS SCC includes the shadow price of the limit,
+  while PyDICE measures the welfare cost of emissions with controls held fixed.
+- At 1% and 2% discounting the 2025 SCC is above GAMS (about 37% and 3%), even when evaluated on the
+  GAMS control path. This is under investigation.
+
+## Comparing a run with GAMS
+
+Run `python -m dice`, pick a scenario, and PyDICE optimises it, saves results to `./results`, and then
+compares it with the GAMS reference solution. From Python or a notebook:
+
+```python
+from dice import run_scenario
+results = run_scenario(9)        # cost-benefit optimal
+results['summary']               # welfare gap, temperature gaps, control rates, SCC, ...
+```
+
+The comparison prints a summary, runs a model-only check (the GAMS control and savings paths fed through
+the PyDICE forward model, which separates equation differences from optimiser differences), and saves
+`gams_comparison_scen<N>.pdf` plus PNG and CSV files: PyDICE vs GAMS for twelve key variables, and their
+differences.
 
 ---
 

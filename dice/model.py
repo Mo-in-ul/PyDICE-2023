@@ -17,8 +17,14 @@ seaborn.set(style='ticks')
 def diceForward_numba(i, MIU, S, alpha, CCATOT, K, I, F_GHGabate, RES0, RES1, RES2, RES3, TBOX1, TBOX2,
                       tstep, dk, gama, eco2Param, sigma, eland, cost1tot, expcost2, miuup, sLBounds, sUBounds,
                       AlphaLowerBound, Fcoef1, Fcoef2, CO2E_GHGabateB, emshare0, emshare1, emshare2, emshare3,
-                      tau0, tau1, tau2, tau3, mateq, fco22x, F_Misc, teq1, teq2, d1, d2, a1, a2base, a3, 
-                      pulse_GtCO2_per_year):
+                      tau0, tau1, tau2, tau3, mateq, fco22x, F_Misc, teq1, teq2, d1, d2, a1, a2base, a3,
+                      pulse_GtCO2_per_year, ECO2_prev, MIU_prev_i):
+    # ECO2_prev   : total CO2 emissions of period i-1 (GtCO2/yr, incl. any pulse)
+    # MIU_prev_i  : clamped control rate of period i-1
+    # GAMS DICE-2023 timing (verified against the GAMS reference output):
+    #   CCATOT(t+1)     = CCATOT(t) + ECO2(t)*tstep/3.666
+    #   F_GHGabate(t+1) = Fcoef2*F_GHGabate(t) + Fcoef1*CO2E_GHGabateB(t)*(1-MIU(t))
+    #   RES_j(t+1) uses alpha(t+1) and ECO2(t+1)
 
     # Clamp controls
     MIU_i = min(max(MIU[i], 0.0), miuup[i])
@@ -31,14 +37,15 @@ def diceForward_numba(i, MIU, S, alpha, CCATOT, K, I, F_GHGabate, RES0, RES1, RE
     # Calculate CURRENT period gross output
     YGROSS = eco2Param[i] * (K ** gama)
     
-    # Calculate CURRENT period emissions with CURRENT MIU
-    ECO2 = (sigma[i] * YGROSS ) * (1.0 - MIU_i) + eland[i]
-    
-    # CORRECTED: Update CCATOT with current period emissions
-    CCATOT = CCATOT + (ECO2 + pulse_GtCO2_per_year[i]) * (tstep / 3.667)
-    
-    # CORRECTED: F_GHGabate uses current period values
-    F_GHGabate = Fcoef2 * F_GHGabate + Fcoef1 * CO2E_GHGabateB[i] * (1.0 - MIU_i)
+    # Total CO2 emissions: in DICE-2023 the control rate applies to land-use CO2 as well
+    #   ECO2(t) = (sigma(t)*YGROSS(t) + eland(t)) * (1 - MIU(t))
+    ECO2 = (sigma[i] * YGROSS + eland[i]) * (1.0 - MIU_i)
+
+    # Cumulative emissions accumulate the PREVIOUS period's emissions (GAMS timing)
+    CCATOT = CCATOT + ECO2_prev * (tstep / 3.666)
+
+    # Other abatable GHG forcing uses the PREVIOUS period's base emissions and control rate
+    F_GHGabate = Fcoef2 * F_GHGabate + Fcoef1 * CO2E_GHGabateB[i - 1] * (1.0 - MIU_prev_i)
     
     # Carbon boxes - use same emissions as CCATOT for consistency
     total_flow = ECO2 + pulse_GtCO2_per_year[i]
@@ -70,11 +77,12 @@ def diceForward_numba(i, MIU, S, alpha, CCATOT, K, I, F_GHGabate, RES0, RES1, RE
     C = Y - I
     
     if not (np.isfinite(MAT) and np.isfinite(TATM) and np.isfinite(C) and np.isfinite(YGROSS)):
-        return np.array([np.nan] * 18, dtype=np.float64)
+        return np.array([np.nan] * 20, dtype=np.float64)
 
     
     return np.array([C, CCATOT, K, I, F_GHGabate, RES0, RES1, RES2, RES3,
-                     TBOX1, TBOX2, MAT, TATM, Y, YNET, YGROSS, DAMFRAC, ABATECOST], dtype=np.float64)
+                     TBOX1, TBOX2, MAT, TATM, Y, YNET, YGROSS, DAMFRAC, ABATECOST,
+                     total_flow, MIU_i], dtype=np.float64)
 
 
 
@@ -127,11 +135,18 @@ def diceTrajectory_numba(MIU, S, alpha, num_periods, tstep, dk, gama, eco2Param,
     MAT[1] = mat0
     # DO NOT mutate alpha here (Numba broadcast risk) — set alpha[1]=a0 in Python wrapper
 
+    # Period-1 emissions and control rate, needed by the lagged CCATOT and F_GHGabate updates
+    MIU_prev = min(max(MIU[1], 0.0), miuup[1])
+    ECO2_prev = (sigma[1] * YGROSS[1] + eland[1]) * (1.0 - MIU_prev) + pulse_GtCO2_per_year[1]
+
     for i in range(2, num_periods + 1):
         result = diceForward_numba(i, MIU, S, alpha, CCATOT[i - 1], K[i - 1], I, F_GHGabate, RES0, RES1, RES2, RES3, TBOX1, TBOX2,
                                    tstep, dk, gama, eco2Param, sigma, eland, cost1tot, expcost2, miuup, sLBounds, sUBounds,
                                    AlphaLowerBound, Fcoef1, Fcoef2, CO2E_GHGabateB, emshare0, emshare1, emshare2, emshare3,
-                                   tau0, tau1, tau2, tau3, mateq, fco22x, F_Misc, teq1, teq2, d1, d2, a1, a2base, a3, pulse_GtCO2_per_year)
+                                   tau0, tau1, tau2, tau3, mateq, fco22x, F_Misc, teq1, teq2, d1, d2, a1, a2base, a3, pulse_GtCO2_per_year,
+                                   ECO2_prev, MIU_prev)
+        ECO2_prev = result[18]
+        MIU_prev = result[19]
 
         if np.any(np.isnan(result)):
             # Return NaNs in all outputs so callers can detect failure
@@ -322,9 +337,9 @@ def recoverAllVars_numba(x, num_periods, tstep, dk, gama, eco2Param, sigma, elan
     CACC = CCATOT - (MAT - mateq)
     DAMAGES = YGROSS * DAMFRAC
     CPRICE = PBACKTIME * (MIU ** (expcost2 - 1.0))
-    # Separate EIND vs ECO2 (old logic still uses MIU on total in the forward, but for reporting split here)
+    # Report EIND and ECO2 consistently with the forward model (control rate applies to land CO2 too)
     EIND = sigma * (eco2Param * (K ** gama)) * (1.0 - MIU)
-    ECO2 = EIND + eland 
+    ECO2 = EIND + eland * (1.0 - MIU)
     ECO2E = ECO2 + CO2E_GHGabateB * (1.0 - MIU)
     FORC = fco22x * np.log(safe_MAT / mateq) / np.log(2.0) + F_Misc + F_GHGab_arr
     FORC_CO2 = fco22x * np.log(safe_MAT / mateq) / np.log(2.0)
@@ -417,7 +432,24 @@ def recoverAllVars_numba(x, num_periods, tstep, dk, gama, eco2Param, sigma, elan
     return output
 
 
-def recoverAllVars(x, params):
+def recoverAllVars(x, params, scc_alpha_response=True):
+    """
+    Rebuild all reported variables from x = [MIU, S, alpha]. The SCC column (39) is
+    recomputed with dice.scc.compute_SCC; by default alpha re-adjusts to each emissions
+    pulse through the IRF condition, which is how the GAMS SCC is defined.
+    """
+    output = _recover_core(x, params)
+    if not np.any(output):
+        return output
+    from dice.scc import compute_SCC          # lazy import: dice.scc imports this module
+    N = params['num_periods']
+    MIU = np.zeros(N + 1); S = np.zeros(N + 1); alpha = np.zeros(N + 1)
+    MIU[1:] = x[:N]; S[1:] = x[N:2 * N]; alpha[1:] = x[2 * N:]
+    output[:, 39] = compute_SCC(params, MIU, S, alpha, alpha_response=scc_alpha_response)[1:]
+    return output
+
+
+def _recover_core(x, params):
     num_periods = params['num_periods']
     return recoverAllVars_numba(
         x, num_periods, params['tstep'], params['dk'], params['gama'], params['eco2Param'], params['sigma'],
@@ -519,13 +551,16 @@ class Dice2023Model:
     # ── NEW METHOD 1 ──────────────────────────────────────────────────────────
     def check_temp_feasibility(self, temp_limit):
         """
-        Run one forward pass at maximum abatement every period.
+        Lowest-temperature path available to the model: maximum abatement in
+        every period and the lowest allowed savings rate (which minimises capital,
+        output and therefore emissions). alpha(t) is solved from the IRF condition.
+        If even this path exceeds temp_limit, no control path can meet it while
+        capital accumulation holds with equality.
         Returns dict: {feasible, peak_temp, peak_period, peak_year, temp_limit,
-                       TATM_maxabate}
+                       TATM_maxabate, irf_solved, irf_max_residual}
 
-        Cost: one compiled forward pass (~0.05 ms). No optimization.
-        Call before any temperature-constrained optimization to detect
-        infeasibility early and avoid silent constraint violation.
+        Cost: one sequential alpha solve (a few thousand compiled forward
+        passes, a few seconds). No optimization.
         """
         p = self.params
         N = self.num_periods
@@ -533,13 +568,13 @@ class Dice2023Model:
         MIU_max    = p['miuup'].copy()
         MIU_max[1] = p['miu1']                            # period 1 always fixed
 
-        S_flat = np.full(N + 1, max(p['optlrsav'], 0.2))
-        S_flat[p['FixSperiod']:] = p['FixSvalue']
+        S_flat = p['sLBounds'].copy()     # lowest allowed savings (fixed value after FixSperiod)
 
-        Alpha_init    = np.linspace(p['a0'], 0.425, N + 1)
-        Alpha_init[1] = p['a0']
+        # Solve alpha(t) from the IRF condition along this control path, so the
+        # carbon cycle is consistent with the emissions it receives.
+        Alpha_irf, irf_ok, irf_res = self.solve_irf_alpha(MIU_max, S_flat)
 
-        out  = diceTrajectory(p, MIU_max, S_flat, Alpha_init)
+        out  = diceTrajectory(p, MIU_max, S_flat, Alpha_irf)
         TATM = out[4]                                      # (N+1,), 1-based
 
         peak_idx    = int(np.argmax(TATM[1:]))
@@ -554,7 +589,18 @@ class Dice2023Model:
             'peak_year':     peak_year,
             'temp_limit':    temp_limit,
             'TATM_maxabate': TATM.copy(),
+            'irf_solved':    irf_ok,
+            'irf_max_residual': irf_res,
         }
+
+    def solve_irf_alpha(self, MIU, S):
+        """
+        For fixed control and savings paths (1-based arrays of length N+1), solve
+        alpha(t) so that the IRF condition holds in every period. Thin wrapper around
+        dice.irf.solve_alpha. Returns (alpha, success flag, max |IRF residual|).
+        """
+        from dice.irf import solve_alpha      # lazy import: dice.irf imports this module
+        return solve_alpha(self.params, MIU, S)
 
     # ── NEW METHOD 2 ──────────────────────────────────────────────────────────
     def _run_best_effort(self, temp_limit, feasibility_info):
@@ -682,19 +728,19 @@ class Dice2023Model:
             # Barrage & Nordhaus (2024, PNAS) explicitly state the 1.5°C
             # scenario "is best thought of as infeasible" within the
             # technologies considered by DICE-2023.  We verify this
-            # computationally with a single max-abatement forward pass
+            # computationally with the lowest-temperature control path
             # before committing to the homotopy continuation.
             fcheck = self.check_temp_feasibility(1.5)
             if not fcheck['feasible']:
                 print(
                     f"\n[PyDICE-2023] INFEASIBILITY DETECTED — scenario 6 (1.5°C)\n"
-                    f"  Maximum abatement at every period yields a peak of "
-                    f"{fcheck['peak_temp']:.3f}°C in {fcheck['peak_year']}.\n"
-                    f"  The 1.5°C ceiling cannot be reached under sequentially\n"
-                    f"  consistent DFAIR dynamics regardless of the control trajectory.\n"
-                    f"  Consistent with Barrage & Nordhaus (2024, PNAS): the 1.5°C\n"
-                    f"  scenario 'is best thought of as infeasible' within the\n"
-                    f"  technologies considered (excluding geoengineering).\n"
+                    f"  Maximum abatement with the lowest allowed savings rate yields a\n"
+                    f"  peak of {fcheck['peak_temp']:.3f}°C in {fcheck['peak_year']}, so no control path\n"
+                    f"  meets 1.5°C while capital accumulation holds with equality.\n"
+                    f"  (The GAMS reference solution reaches 1.5°C only by letting the\n"
+                    f"  capital stock fall far below its depreciation path, i.e. free\n"
+                    f"  disposal of capital.) Consistent with Barrage & Nordhaus (2024,\n"
+                    f"  PNAS): the 1.5°C scenario 'is best thought of as infeasible'.\n"
                     f"  Returning best-effort trajectory (minimize exceedance).\n"
                 )
                 return self._run_best_effort(1.5, fcheck)
@@ -818,27 +864,27 @@ class Dice2023Model:
                     last_success = step_res.x.copy()
                     continue
 
-                    if irf_res < 0.01 and temp_up_min >= -0.01:
-                        print("  Accepting despite convergence warning")
-                        x_current    = step_res.x.copy()
-                        last_success = step_res.x.copy()
-                        continue
+                if irf_res < 0.01 and temp_up_min >= -0.01:
+                    print("  Accepting despite convergence warning")
+                    x_current    = step_res.x.copy()
+                    last_success = step_res.x.copy()
+                    continue
 
-                    print("  Step failed — retrying...")
-                    step_res2 = minimize(
-                        prob_step.objective, step_res.x,
-                        method='SLSQP', bounds=bounds, constraints=cons_step,
-                        options={'maxiter': 5000, 'ftol': 1e-8, 'disp': True})
-                    irf_res2     = np.abs(prob_step.irf_residual(step_res2.x)).max()
-                    temp_up_min2 = prob_step.temp_up(step_res2.x).min()
+                print("  Step failed — retrying...")
+                step_res2 = minimize(
+                    prob_step.objective, step_res.x,
+                    method='SLSQP', bounds=bounds, constraints=cons_step,
+                    options={'maxiter': 5000, 'ftol': 1e-8, 'disp': True})
+                irf_res2     = np.abs(prob_step.irf_residual(step_res2.x)).max()
+                temp_up_min2 = prob_step.temp_up(step_res2.x).min()
 
-                    if irf_res2 < 0.01 and temp_up_min2 >= -0.01:
-                        x_current    = step_res2.x.copy()
-                        last_success = step_res2.x.copy()
-                        print(f"  Retry accepted | IRF: {irf_res2:.6f}")
-                    else:
-                        print(f"  Physical barrier at {temp_limit}°C — using last good solution")
-                        break
+                if irf_res2 < 0.01 and temp_up_min2 >= -0.01:
+                    x_current    = step_res2.x.copy()
+                    last_success = step_res2.x.copy()
+                    print(f"  Retry accepted | IRF: {irf_res2:.6f}")
+                else:
+                    print(f"  Physical barrier at {temp_limit}°C — using last good solution")
+                    break
 
             res   = step_res
             res.x = last_success
@@ -859,8 +905,10 @@ class Dice2023Model:
         print("Optimized Alpha range:", x_opt[2*self.num_periods:].min(),          x_opt[2*self.num_periods:].max())
         print("IRF max residual:",      np.max(np.abs(prob.irf_residual(x_opt))))
 
-        # ── Changed from `return x_opt, output, None` ────────────────────
-        result_meta = {'infeasible': False, 'scenario': self.scenario}
+        result_meta = {'infeasible': False, 'scenario': self.scenario,
+                       'success': bool(res.success), 'message': str(res.message),
+                       'iterations': int(getattr(res, 'nit', -1)),
+                       'irf_max_residual': float(np.max(np.abs(prob.irf_residual(x_opt))))}
         return x_opt, output, result_meta
 
     def dump_parameters(self):
@@ -1000,37 +1048,7 @@ def display_scenarios():
 
 
 if __name__ == "__main__":
+    # Pick a scenario, optimise it, save results and plots, then compare with GAMS.
+    from dice.compare import run_scenario
     scenario = display_scenarios()
-    model = Dice2023Model(num_times=81, scenario=scenario)
-    model.dump_parameters()
-    years = np.arange(
-        model.params['yr0'],
-        model.params['yr0'] + model.params['tstep'] * model.num_periods,
-        model.params['tstep']
-    )
-    x_opt, output, result_meta = model.run_model()
-
-    if result_meta.get('infeasible'):
-        print(f"\n[Note] Scenario returned infeasible result.")
-        print(f"  Best-effort peak temperature : {result_meta['best_effort_peak_temp']:.3f}°C")
-        print(f"  Peak year                    : {result_meta['best_effort_peak_year']}")
-
-    model.dump_state(years, output, "./results/dice2023_state.csv", scenario)
-    model.plot_state_to_file(
-        f"./results/dice2023_plots_scen{scenario}.pdf", years, output, x_opt)
-
-
-if __name__ == "__main__":
-    scenario = display_scenarios()
-    model = Dice2023Model(num_times=81, scenario=scenario)
-    model.dump_parameters()
-    years = np.arange(
-        model.params['yr0'],
-        model.params['yr0'] + model.params['tstep'] * model.num_periods,
-        model.params['tstep'],
-    )
-    x_opt, output, _ = model.run_model()
-    model.dump_state(years, output, "./results/dice2023_state.csv", scenario)
-    model.plot_state_to_file(
-        f"./results/dice2023_plots_scen{scenario}.pdf", years, output, x_opt
-    )
+    run_scenario(scenario, compare=True, show=True)

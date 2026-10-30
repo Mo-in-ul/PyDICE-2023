@@ -51,7 +51,7 @@ def recoverAllVars_numba(x, num_periods, tstep, dk, gama, eco2Param, sigma, elan
     DAMAGES = YGROSS * DAMFRAC
     CPRICE = PBACKTIME * (MIU ** (expcost2 - 1.0))
     EIND = sigma * (eco2Param * (K ** gama)) * (1.0 - MIU)
-    ECO2 = EIND + eland
+    ECO2 = EIND + eland * (1.0 - MIU)   # DICE-2023: control rate also applies to land CO2
     ECO2E = ECO2 + CO2E_GHGabateB * (1.0 - MIU)
     FORC = fco22x * np.log(safe_MAT / mateq) / np.log(2.0) + F_Misc + F_GHGab_arr
     FORC_CO2 = fco22x * np.log(safe_MAT / mateq) / np.log(2.0)
@@ -137,7 +137,24 @@ def recoverAllVars_numba(x, num_periods, tstep, dk, gama, eco2Param, sigma, elan
     return output
 
 
-def recoverAllVars(x, params):
+def recoverAllVars(x, params, scc_alpha_response=True):
+    """
+    Rebuild all reported variables from x = [MIU, S, alpha]. The SCC column (39) uses
+    dice.scc.compute_SCC; by default alpha re-adjusts to each emissions pulse through the
+    IRF condition, as in GAMS. Pass scc_alpha_response=False for the faster fixed-alpha SCC.
+    """
+    output = _recover_core(x, params)
+    if not np.any(output):
+        return output
+    from dice.scc import compute_SCC
+    N = params['num_periods']
+    MIU = np.zeros(N + 1); S = np.zeros(N + 1); alpha = np.zeros(N + 1)
+    MIU[1:] = x[:N]; S[1:] = x[N:2 * N]; alpha[1:] = x[2 * N:]
+    output[:, 39] = compute_SCC(params, MIU, S, alpha, alpha_response=scc_alpha_response)[1:]
+    return output
+
+
+def _recover_core(x, params):
     return recoverAllVars_numba(
         x, params['num_periods'], params['tstep'], params['dk'], params['gama'],
         params['eco2Param'], params['sigma'], params['eland'], params['cost1tot'],

@@ -6,7 +6,8 @@ import pandas as pd
 from scipy.optimize import minimize, root
 from numba import njit
 
-from dice.model import diceTrajectory_numba, DiceFunc, recoverAllVars
+from dice.model import diceTrajectory_numba, diceTrajectory, DiceFunc, recoverAllVars
+from dice.irf import solve_alpha
 from dice.params import LoadParams
 
 
@@ -111,21 +112,33 @@ def compute_SCC_numba(MIU, S, alpha, num_periods, tstep, dk, gama, eco2Param, si
 
 
 
-def compute_SCC(params, MIU, S, alpha):
+def compute_SCC(params, MIU, S, alpha, alpha_response=True, pulse_size=1e-3):
     """
     Compute the SCC trajectory for a given policy.
 
     Parameters
     ----------
-    params : dict       Output of LoadParams (or apply_disc_prstp).
-    MIU    : ndarray    Emission control rates, shape (num_periods+1,), 1-based.
-    S      : ndarray    Savings rates,          shape (num_periods+1,), 1-based.
-    alpha  : ndarray    IRF scaling,            shape (num_periods+1,), 1-based.
+    params         : dict       Output of LoadParams (or apply_disc_prstp).
+    MIU            : ndarray    Emission control rates, shape (num_periods+1,), 1-based.
+    S              : ndarray    Savings rates,          shape (num_periods+1,), 1-based.
+    alpha          : ndarray    IRF scaling,            shape (num_periods+1,), 1-based.
+    alpha_response : bool       True (default): alpha re-adjusts to the emissions pulse
+                                through the IRF condition. This is how the GAMS SCC is
+                                defined (the marginal of the emissions equation with the
+                                IRF condition binding) and it reproduces the GAMS values in
+                                unconstrained scenarios. False: alpha is held at its baseline
+                                path (the earlier approach, compute_SCC_numba), which
+                                understates the GAMS SCC by roughly 13-20%.
+    pulse_size     : float      Pulse h in GtCO2/yr; Richardson extrapolation uses h and h/2.
 
     Returns
     -------
     SCC : ndarray, shape (num_periods+1,), 1-based.
         Social cost of carbon in 2019 USD/tCO2.  SCC[1] = 0 by convention.
+
+    Note: when a temperature limit binds (scenarios 6 and 7), the GAMS SCC also contains
+    the shadow price of that limit. This function measures the welfare cost of emissions
+    with controls held fixed, so it will be lower than GAMS there.
     """
     MIU   = np.ascontiguousarray(MIU,   dtype=np.float64).copy()
     S     = np.ascontiguousarray(S,     dtype=np.float64)
@@ -133,27 +146,62 @@ def compute_SCC(params, MIU, S, alpha):
     MIU[1]   = params['miu1']
     alpha[1] = params['a0']
 
-    return compute_SCC_numba(
-        MIU, S, alpha,
-        params['num_periods'], params['tstep'], params['dk'], params['gama'],
-        params['eco2Param'], params['sigma'], params['eland'], params['cost1tot'],
-        params['expcost2'], params['miuup'], params['sLBounds'], params['sUBounds'],
-        params['AlphaLowerBound'], params['Fcoef1'], params['Fcoef2'],
-        params['CO2E_GHGabateB'], params['emshare0'], params['emshare1'],
-        params['emshare2'], params['emshare3'], params['tau0'], params['tau1'],
-        params['tau2'], params['tau3'], params['mateq'], params['fco22x'],
-        params['F_Misc'], params['teq1'], params['teq2'], params['d1'], params['d2'],
-        params['a1'], params['a2base'], params['a3'], params['res00'], params['res10'],
-        params['res20'], params['res30'], params['tbox10'], params['tbox20'],
-        params['CumEmiss0'], params['F_GHGabate2020'], params['k0'], params['tatm0'],
-        params['mat0'], params['a0'], params['L'], params['RR'],
-        params['scale1'], params['scale2'], params['elasmu'],
-    )
+    if not alpha_response:
+        return compute_SCC_numba(
+            MIU, S, alpha,
+            params['num_periods'], params['tstep'], params['dk'], params['gama'],
+            params['eco2Param'], params['sigma'], params['eland'], params['cost1tot'],
+            params['expcost2'], params['miuup'], params['sLBounds'], params['sUBounds'],
+            params['AlphaLowerBound'], params['Fcoef1'], params['Fcoef2'],
+            params['CO2E_GHGabateB'], params['emshare0'], params['emshare1'],
+            params['emshare2'], params['emshare3'], params['tau0'], params['tau1'],
+            params['tau2'], params['tau3'], params['mateq'], params['fco22x'],
+            params['F_Misc'], params['teq1'], params['teq2'], params['d1'], params['d2'],
+            params['a1'], params['a2base'], params['a3'], params['res00'], params['res10'],
+            params['res20'], params['res30'], params['tbox10'], params['tbox20'],
+            params['CumEmiss0'], params['F_GHGabate2020'], params['k0'], params['tatm0'],
+            params['mat0'], params['a0'], params['L'], params['RR'],
+            params['scale1'], params['scale2'], params['elasmu'],
+        )
+
+    N = params['num_periods']
+    el = params['elasmu']
+
+    def welfare_sum(C):
+        cpc = 1000.0 * C[1:] / params['L'][1:]
+        return np.sum((((cpc ** (1.0 - el)) - 1.0) / (1.0 - el) - 1.0)
+                      * params['L'][1:] * params['RR'][1:]), cpc
+
+    alpha_base, _, _ = solve_alpha(params, MIU, S, alpha_start=alpha)
+    base = diceTrajectory(params, MIU, S, alpha_base)
+    if np.isnan(base[0]):
+        return np.zeros(N + 1)
+    W0, cpc = welfare_sum(base[1])
+
+    def dW(i, h):
+        pulse = np.zeros(N + 1)
+        pulse[i] = h
+        a, _, _ = solve_alpha(params, MIU, S, pulse=pulse, alpha_start=alpha_base, first_period=i)
+        alt = diceTrajectory(params, MIU, S, a, pulse)
+        if np.isnan(alt[0]):
+            return np.nan
+        return welfare_sum(alt[1])[0] - W0
+
+    SCC = np.zeros(N + 1)
+    h, h2 = pulse_size, pulse_size / 2.0
+    for i in range(2, N + 1):
+        lam = (cpc[i - 1] ** (-el)) * params['RR'][i]
+        if abs(lam) < 1e-300:
+            continue
+        s_h  = -(dW(i, h)  / h)  / lam
+        s_h2 = -(dW(i, h2) / h2) / lam
+        SCC[i] = (4.0 * s_h2 - s_h) / 3.0 if (np.isfinite(s_h) and np.isfinite(s_h2)) else 0.0
+    return SCC
 
 
 
 
-def run_scc_fan(samples, num_periods=81):
+def run_scc_fan(samples, num_periods=81, scc_alpha_response=True):
     """
     Optimize DICE across a DataFrame of LHS parameter samples and collect
     per-sample SCC trajectories for fan chart construction.
@@ -165,6 +213,9 @@ def run_scc_fan(samples, num_periods=81):
         Typically the output of the LHS design in 03_monte_carlo.ipynb.
     num_periods : int
         Number of DICE periods (default 81).
+    scc_alpha_response : bool
+        True (default) computes the SCC with alpha responding to the pulse, matching
+        GAMS; adds a few seconds per sample. False uses the faster fixed-alpha SCC.
 
     Returns
     -------
@@ -254,7 +305,7 @@ def run_scc_fan(samples, num_periods=81):
         if np.isnan(res.fun) or res.fun > 1e14:
             continue
 
-        output = recoverAllVars(res.x, p)
+        output = recoverAllVars(res.x, p, scc_alpha_response=scc_alpha_response)
         SCC    = output[:, 39]
 
         for yr, scc in zip(years, SCC):
