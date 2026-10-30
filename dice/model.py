@@ -2,7 +2,7 @@ import numpy as np
 import os
 import csv
 import time
-from scipy.optimize import minimize
+from scipy.optimize import minimize, brentq
 from matplotlib import pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
 import seaborn
@@ -534,13 +534,16 @@ class Dice2023Model:
     # ── NEW METHOD 1 ──────────────────────────────────────────────────────────
     def check_temp_feasibility(self, temp_limit):
         """
-        Run one forward pass at maximum abatement every period.
+        Lowest-temperature path available to the model: maximum abatement in
+        every period and the lowest allowed savings rate (which minimises capital,
+        output and therefore emissions). alpha(t) is solved from the IRF condition.
+        If even this path exceeds temp_limit, no control path can meet it while
+        capital accumulation holds with equality.
         Returns dict: {feasible, peak_temp, peak_period, peak_year, temp_limit,
-                       TATM_maxabate}
+                       TATM_maxabate, irf_solved, irf_max_residual}
 
-        Cost: one compiled forward pass (~0.05 ms). No optimization.
-        Call before any temperature-constrained optimization to detect
-        infeasibility early and avoid silent constraint violation.
+        Cost: one sequential alpha solve (a few thousand compiled forward
+        passes, a few seconds). No optimization.
         """
         p = self.params
         N = self.num_periods
@@ -548,13 +551,13 @@ class Dice2023Model:
         MIU_max    = p['miuup'].copy()
         MIU_max[1] = p['miu1']                            # period 1 always fixed
 
-        S_flat = np.full(N + 1, max(p['optlrsav'], 0.2))
-        S_flat[p['FixSperiod']:] = p['FixSvalue']
+        S_flat = p['sLBounds'].copy()     # lowest allowed savings (fixed value after FixSperiod)
 
-        Alpha_init    = np.linspace(p['a0'], 0.425, N + 1)
-        Alpha_init[1] = p['a0']
+        # Solve alpha(t) from the IRF condition along this control path, so the
+        # carbon cycle is consistent with the emissions it receives.
+        Alpha_irf, irf_ok, irf_res = self.solve_irf_alpha(MIU_max, S_flat)
 
-        out  = diceTrajectory(p, MIU_max, S_flat, Alpha_init)
+        out  = diceTrajectory(p, MIU_max, S_flat, Alpha_irf)
         TATM = out[4]                                      # (N+1,), 1-based
 
         peak_idx    = int(np.argmax(TATM[1:]))
@@ -569,7 +572,62 @@ class Dice2023Model:
             'peak_year':     peak_year,
             'temp_limit':    temp_limit,
             'TATM_maxabate': TATM.copy(),
+            'irf_solved':    irf_ok,
+            'irf_max_residual': irf_res,
         }
+
+    def solve_irf_alpha(self, MIU, S):
+        """
+        For fixed control and savings paths (1-based arrays of length N+1),
+        solve alpha(t), t = 1..N, so that the IRF condition holds in every period.
+        Returns (alpha array of length N+1, success flag, max |IRF residual|).
+        Periods where the solution would fall below AlphaLowerBound (possible in
+        the far future under large net-negative emissions) are held at the bound,
+        matching the clamp in the forward model; they are excluded from the
+        residual and do not count as failures.
+        """
+        p = self.params
+        N = self.num_periods
+        prob = DiceFunc(N, p, TempUpperConstraint=20.0,
+                        TempLowerConstraint=self.TempLowerConstraint)
+        MIU_x = np.asarray(MIU, dtype=np.float64)[1:N + 1]
+        S_x   = np.asarray(S,   dtype=np.float64)[1:N + 1]
+
+        def resid(a):
+            return prob.irf_residual(np.concatenate([MIU_x, S_x, a]))
+
+        # The residual in period t depends only on alpha(1..t), so alpha can be
+        # solved one period at a time with a bracketed scalar root.
+        a = np.full(N, p['a0'])
+        ok = True
+        at_bound = np.zeros(N, dtype=bool)
+        lo, hi = max(p['AlphaLowerBound'], 1e-3), 50.0
+        for k in range(1, N):
+            def g(val, k=k):
+                a[k] = val
+                return resid(a)[k]
+            try:
+                g_lo, g_hi = g(lo), g(hi)
+                if np.sign(g_lo) == np.sign(g_hi):
+                    # IRF residual = LHS - RHS(alpha); RHS increases with alpha.
+                    # g(lo) < 0 means even the smallest allowed alpha is too large.
+                    if g_lo < 0:
+                        a[k] = lo
+                        at_bound[k] = True
+                    else:
+                        ok = False
+                        a[k] = hi
+                else:
+                    a[k] = brentq(g, lo, hi, xtol=1e-12)
+            except (ValueError, FloatingPointError):
+                ok = False
+                a[k] = a[k - 1]
+        alpha = np.zeros(N + 1)
+        alpha[1:] = a
+        alpha[1] = p['a0']
+        r = resid(a)
+        max_res = float(np.max(np.abs(r[~at_bound]))) if np.any(~at_bound) else 0.0
+        return alpha, ok, max_res
 
     # ── NEW METHOD 2 ──────────────────────────────────────────────────────────
     def _run_best_effort(self, temp_limit, feasibility_info):
@@ -697,19 +755,19 @@ class Dice2023Model:
             # Barrage & Nordhaus (2024, PNAS) explicitly state the 1.5°C
             # scenario "is best thought of as infeasible" within the
             # technologies considered by DICE-2023.  We verify this
-            # computationally with a single max-abatement forward pass
+            # computationally with the lowest-temperature control path
             # before committing to the homotopy continuation.
             fcheck = self.check_temp_feasibility(1.5)
             if not fcheck['feasible']:
                 print(
                     f"\n[PyDICE-2023] INFEASIBILITY DETECTED — scenario 6 (1.5°C)\n"
-                    f"  Maximum abatement at every period yields a peak of "
-                    f"{fcheck['peak_temp']:.3f}°C in {fcheck['peak_year']}.\n"
-                    f"  The 1.5°C ceiling cannot be reached under sequentially\n"
-                    f"  consistent DFAIR dynamics regardless of the control trajectory.\n"
-                    f"  Consistent with Barrage & Nordhaus (2024, PNAS): the 1.5°C\n"
-                    f"  scenario 'is best thought of as infeasible' within the\n"
-                    f"  technologies considered (excluding geoengineering).\n"
+                    f"  Maximum abatement with the lowest allowed savings rate yields a\n"
+                    f"  peak of {fcheck['peak_temp']:.3f}°C in {fcheck['peak_year']}, so no control path\n"
+                    f"  meets 1.5°C while capital accumulation holds with equality.\n"
+                    f"  (The GAMS reference solution reaches 1.5°C only by letting the\n"
+                    f"  capital stock fall far below its depreciation path, i.e. free\n"
+                    f"  disposal of capital.) Consistent with Barrage & Nordhaus (2024,\n"
+                    f"  PNAS): the 1.5°C scenario 'is best thought of as infeasible'.\n"
                     f"  Returning best-effort trajectory (minimize exceedance).\n"
                 )
                 return self._run_best_effort(1.5, fcheck)
@@ -833,27 +891,27 @@ class Dice2023Model:
                     last_success = step_res.x.copy()
                     continue
 
-                    if irf_res < 0.01 and temp_up_min >= -0.01:
-                        print("  Accepting despite convergence warning")
-                        x_current    = step_res.x.copy()
-                        last_success = step_res.x.copy()
-                        continue
+                if irf_res < 0.01 and temp_up_min >= -0.01:
+                    print("  Accepting despite convergence warning")
+                    x_current    = step_res.x.copy()
+                    last_success = step_res.x.copy()
+                    continue
 
-                    print("  Step failed — retrying...")
-                    step_res2 = minimize(
-                        prob_step.objective, step_res.x,
-                        method='SLSQP', bounds=bounds, constraints=cons_step,
-                        options={'maxiter': 5000, 'ftol': 1e-8, 'disp': True})
-                    irf_res2     = np.abs(prob_step.irf_residual(step_res2.x)).max()
-                    temp_up_min2 = prob_step.temp_up(step_res2.x).min()
+                print("  Step failed — retrying...")
+                step_res2 = minimize(
+                    prob_step.objective, step_res.x,
+                    method='SLSQP', bounds=bounds, constraints=cons_step,
+                    options={'maxiter': 5000, 'ftol': 1e-8, 'disp': True})
+                irf_res2     = np.abs(prob_step.irf_residual(step_res2.x)).max()
+                temp_up_min2 = prob_step.temp_up(step_res2.x).min()
 
-                    if irf_res2 < 0.01 and temp_up_min2 >= -0.01:
-                        x_current    = step_res2.x.copy()
-                        last_success = step_res2.x.copy()
-                        print(f"  Retry accepted | IRF: {irf_res2:.6f}")
-                    else:
-                        print(f"  Physical barrier at {temp_limit}°C — using last good solution")
-                        break
+                if irf_res2 < 0.01 and temp_up_min2 >= -0.01:
+                    x_current    = step_res2.x.copy()
+                    last_success = step_res2.x.copy()
+                    print(f"  Retry accepted | IRF: {irf_res2:.6f}")
+                else:
+                    print(f"  Physical barrier at {temp_limit}°C — using last good solution")
+                    break
 
             res   = step_res
             res.x = last_success
@@ -1033,19 +1091,3 @@ if __name__ == "__main__":
     model.dump_state(years, output, "./results/dice2023_state.csv", scenario)
     model.plot_state_to_file(
         f"./results/dice2023_plots_scen{scenario}.pdf", years, output, x_opt)
-
-
-if __name__ == "__main__":
-    scenario = display_scenarios()
-    model = Dice2023Model(num_times=81, scenario=scenario)
-    model.dump_parameters()
-    years = np.arange(
-        model.params['yr0'],
-        model.params['yr0'] + model.params['tstep'] * model.num_periods,
-        model.params['tstep'],
-    )
-    x_opt, output, _ = model.run_model()
-    model.dump_state(years, output, "./results/dice2023_state.csv", scenario)
-    model.plot_state_to_file(
-        f"./results/dice2023_plots_scen{scenario}.pdf", years, output, x_opt
-    )
