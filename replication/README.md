@@ -11,6 +11,8 @@ reimplementation of DICE-2023). The experiment is deterministic; every table
 and figure in the paper regenerates from the code here. There are no
 proprietary or third-party datasets — all data are model-generated.
 
+The replication package for the elasticity letter ("Precautionary discounting reverses the elasticity–SCC relationship in DICE-2023") is in `eta_letter/`, with its own README.
+
 ## Contents
 
 ```

@@ -1,0 +1,9 @@
+# Versions used for the submitted results (newer versions should work)
+numpy>=2.0        # 2.5.3
+scipy>=1.12       # 1.18.1
+jax>=0.4.30       # 0.12.0.1, 64-bit is enabled by dice_jax.py
+cyipopt>=1.4      # 1.7.0, with IPOPT and MUMPS (conda install -c conda-forge cyipopt)
+matplotlib>=3.8   # 3.11.2
+seaborn>=0.13     # 0.13.2, imported by dice2023_corrected.py
+pandas>=2.0       # 3.0.5
+openpyxl>=3.1     # 3.1.5, reads the GAMS reference .xlsx files
