@@ -153,6 +153,11 @@ cd dice/notebooks
 jupyter lab
 ```
 
+Replication packages for papers that use PyDICE-2023 are in `replication/`:
+
+- `replication/` (top level): "Convergent Abatement, Divergent Prices" (see `replication/README.md`).
+- `replication/eta_letter/`: "Precautionary discounting reverses the elasticity–SCC relationship in DICE-2023" (see `replication/eta_letter/README.md`).
+
 ---
 
 ## Monte Carlo Uncertainty Analysis

@@ -8,3 +8,7 @@ __numba_cache__/
 *.nbc
 .DS_Store
 .vscode/
+
+# eta letter: model dumps and logs written while re-running
+replication/eta_letter/results/
+replication/eta_letter/**/*.log
