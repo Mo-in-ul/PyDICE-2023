@@ -1,0 +1,15 @@
+\begin{tabular}{lr}
+\toprule
+Computation & Wall time \\
+\midrule
+Forward model, one evaluation (Numba) & 0.086 ms \\
+Saturation path $\alpha$ for given controls (root finding) & 65 ms \\
+Optimization, SLSQP, cold start & 9.9 s (72 iterations) \\
+Optimization, IPOPT with exact derivatives, cold / warm start & 11.9 s / 5.9 s \\
+SCC by pulse, all 80 periods, $\alpha$ held fixed & 13 ms \\
+SCC by pulse, all 80 periods, $\alpha$ re-solved & 4.3 s \\
+SCC by the implicit function theorem, all periods & 2.9 ms (+2.8 s compilation, once) \\
+One Monte Carlo draw (SLSQP + decomposition), median & 7.0 s \\
+One step of the Gymnasium environment & 0.19 ms \\
+\bottomrule
+\end{tabular}

@@ -157,6 +157,7 @@ Replication packages for papers that use PyDICE-2023 are in `replication/`:
 
 - `replication/` (top level): "Convergent Abatement, Divergent Prices" (see `replication/README.md`).
 - `replication/eta_letter/`: "Precautionary discounting reverses the elasticity–SCC relationship in DICE-2023" (see `replication/eta_letter/README.md`).
+- `replication/scc_saturation/`: "How Much of the Social Cost of Carbon Comes from Carbon-Sink Saturation? Evidence from PyDICE-2023" (release 3.0: the GAMS-verified model, the exact SCC decomposition and every script, result, table and figure of the paper; see `replication/scc_saturation/README.md`).
 
 ---
 

@@ -1,0 +1,44 @@
+{
+ "scenario": 10,
+ "name": "Baseline",
+ "welfare_gap_pct": -8.636188517742975e-05,
+ "max_dT_to_2100": 6.005062822356244e-05,
+ "max_dT_to_2215": 6.005062822356244e-05,
+ "peak_T_pydice": 5.5695341482302,
+ "peak_T_gams": 5.5694892144,
+ "MIU_2030": [
+  0.06370923082758263,
+  0.0637092308
+ ],
+ "MIU_2050": [
+  0.09829637213380356,
+  0.0982963721
+ ],
+ "SCC_2025": [
+  77.68159461504122,
+  77.6793114132
+ ],
+ "SCC_2050": [
+  175.02958736583912,
+  175.0251598787
+ ],
+ "ECO2_2030": [
+  46.865835946973505,
+  46.8657790857
+ ],
+ "model_only_max_dT_to_2215": 5.972288281030913e-05,
+ "gams_capital_disposal_pct": 4.939609211234929e-11,
+ "gams_capital_disposal_year": 2045,
+ "irf_max_residual": 3.8013286030036397e-07,
+ "infeasible": false,
+ "elapsed_s": 18.550793886184692,
+ "meta": {
+  "scenario": 10,
+  "infeasible": false,
+  "success": true,
+  "message": "Optimization terminated successfully",
+  "iterations": 56,
+  "irf_max_residual": 3.8013286030036397e-07,
+  "peak_temp": 6.054521099247195
+ }
+}

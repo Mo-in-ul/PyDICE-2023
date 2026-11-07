@@ -1,0 +1,44 @@
+{
+ "scenario": 8,
+ "name": "Paris",
+ "welfare_gap_pct": -2.113260616214338e-10,
+ "max_dT_to_2100": 2.508390035682595e-07,
+ "max_dT_to_2215": 4.16326046082105e-07,
+ "peak_T_pydice": 3.667514145648408,
+ "peak_T_gams": 3.6675144593,
+ "MIU_2030": [
+  0.13,
+  0.13
+ ],
+ "MIU_2050": [
+  0.26999999999999996,
+  0.27
+ ],
+ "SCC_2025": [
+  71.51958023083459,
+  71.5194711255
+ ],
+ "SCC_2050": [
+  159.4242787505352,
+  159.422758099
+ ],
+ "ECO2_2030": [
+  43.59705293783396,
+  43.5970575932
+ ],
+ "model_only_max_dT_to_2215": 8.26543278265035e-11,
+ "gams_capital_disposal_pct": 4.419224519161536e-11,
+ "gams_capital_disposal_year": 2040,
+ "irf_max_residual": 2.1570940589299425e-09,
+ "infeasible": false,
+ "elapsed_s": 19.392069101333618,
+ "meta": {
+  "scenario": 8,
+  "infeasible": false,
+  "success": true,
+  "message": "Optimization terminated successfully",
+  "iterations": 68,
+  "irf_max_residual": 2.1570940589299425e-09,
+  "peak_temp": 3.8391974030188827
+ }
+}

@@ -1,0 +1,5 @@
+log SCC 2025 coefs {'psi2': np.float64(0.409), 'rho': np.float64(-0.387), 'irC': np.float64(0.047), 'irT': np.float64(0.044), 'eland0': np.float64(0.006)} R2 0.969
+SCC p5/50/95 [ 14.2  37.1 105.4]
+feedback $ p5/50/95 [ 0.92  3.06 10.34]
+net-negative first year p5/50/95 [2120. 2135. 2180.]
+Tlo binds 253

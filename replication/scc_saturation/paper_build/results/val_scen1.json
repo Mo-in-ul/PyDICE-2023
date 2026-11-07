@@ -1,0 +1,44 @@
+{
+ "scenario": 1,
+ "name": "1% discounting",
+ "welfare_gap_pct": 0.030091032333408138,
+ "max_dT_to_2100": 0.0003568839027827675,
+ "max_dT_to_2215": 0.0005281281775491031,
+ "peak_T_pydice": 1.8682915640896731,
+ "peak_T_gams": 1.867947654,
+ "MIU_2030": [
+  0.23999999999227387,
+  0.24
+ ],
+ "MIU_2050": [
+  0.7199999999984162,
+  0.72
+ ],
+ "SCC_2025": [
+  769.8106086199717,
+  570.7497809362
+ ],
+ "SCC_2050": [
+  947.449579561537,
+  695.1769387632
+ ],
+ "ECO2_2030": [
+  42.03874434042386,
+  42.016000329
+ ],
+ "model_only_max_dT_to_2215": 0.0012996526702011568,
+ "gams_capital_disposal_pct": 6.308576136440579e-12,
+ "gams_capital_disposal_year": 2095,
+ "irf_max_residual": 0.0001218170248122874,
+ "infeasible": false,
+ "elapsed_s": 22.241463899612427,
+ "meta": {
+  "scenario": 1,
+  "infeasible": false,
+  "success": false,
+  "message": "Positive directional derivative for linesearch",
+  "iterations": 103,
+  "irf_max_residual": 0.0001218170248122874,
+  "peak_temp": 1.8682915640896731
+ }
+}

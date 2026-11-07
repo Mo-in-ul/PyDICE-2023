@@ -1,0 +1,72 @@
+{
+ "scenario": 1,
+ "name": "1% discounting",
+ "welfare_gap_pct": 1.3721747779060296e-07,
+ "max_dT_to_2100": 9.471921402770533e-08,
+ "max_dT_to_2215": 2.1527511995245163e-07,
+ "peak_T_pydice": 1.8679476194092297,
+ "peak_T_gams": 1.867947654,
+ "MIU_2030": [
+  0.23999999968430538,
+  0.24
+ ],
+ "MIU_2050": [
+  0.7199999999340564,
+  0.72
+ ],
+ "SCC_2025": [
+  850.8414161035903,
+  570.7497809362
+ ],
+ "SCC_2050": [
+  1050.4030783284365,
+  695.1769387632
+ ],
+ "ECO2_2030": [
+  42.01598774121991,
+  42.016000329
+ ],
+ "model_only_max_dT_to_2215": 5.7016835697254464e-11,
+ "gams_capital_disposal_pct": 6.308576136440579e-12,
+ "gams_capital_disposal_year": 2095,
+ "irf_max_residual": 3.204393264866212e-05,
+ "infeasible": false,
+ "flags": [
+  "cpcap",
+  "k0",
+  "miu1",
+  "miulo",
+  "tlo"
+ ],
+ "attempts": [
+  {
+   "ftol": 1e-05,
+   "status": 8,
+   "message": "Positive directional derivative for linesearch",
+   "nit": 98,
+   "W": 2056945.3656272485
+  },
+  {
+   "ftol": 1e-07,
+   "status": 8,
+   "message": "Positive directional derivative for linesearch",
+   "nit": 5,
+   "W": 2056945.3656272485
+  },
+  {
+   "ftol": 1e-09,
+   "status": 8,
+   "message": "Positive directional derivative for linesearch",
+   "nit": 5,
+   "W": 2056945.3656272485
+  }
+ ],
+ "success": false,
+ "final_status": 8,
+ "elapsed_s": 11.453318119049072,
+ "Tlo": 0.5,
+ "miu_lo": 0.01,
+ "cprice_cap": 1000.0,
+ "k0": 409.0,
+ "min_T": 0.49999912736789565
+}

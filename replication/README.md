@@ -13,6 +13,8 @@ proprietary or third-party datasets — all data are model-generated.
 
 The replication package for the elasticity letter ("Precautionary discounting reverses the elasticity–SCC relationship in DICE-2023") is in `eta_letter/`, with its own README.
 
+The replication package for "How Much of the Social Cost of Carbon Comes from Carbon-Sink Saturation? Evidence from PyDICE-2023" (release 3.0) is in `scc_saturation/`, with its own README.
+
 ## Contents
 
 ```

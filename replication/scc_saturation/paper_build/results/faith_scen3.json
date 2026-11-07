@@ -1,0 +1,58 @@
+{
+ "scenario": 3,
+ "name": "3% discounting",
+ "welfare_gap_pct": 1.423501594668647e-10,
+ "max_dT_to_2100": 8.373546371842622e-07,
+ "max_dT_to_2215": 8.797709725172354e-07,
+ "peak_T_pydice": 2.5190899942924423,
+ "peak_T_gams": 2.5190891807,
+ "MIU_2030": [
+  0.24,
+  0.24
+ ],
+ "MIU_2050": [
+  0.47453738540332685,
+  0.4745383122
+ ],
+ "SCC_2025": [
+  102.11723381199543,
+  101.8157743193
+ ],
+ "SCC_2050": [
+  172.23149582923037,
+  171.6049014253
+ ],
+ "ECO2_2030": [
+  40.231777812753606,
+  40.2317832982
+ ],
+ "model_only_max_dT_to_2215": 6.396350116233407e-11,
+ "gams_capital_disposal_pct": 1.618877045431844e-11,
+ "gams_capital_disposal_year": 2065,
+ "irf_max_residual": 1.525452830719587e-08,
+ "infeasible": false,
+ "flags": [
+  "cpcap",
+  "k0",
+  "miu1",
+  "miulo",
+  "tlo"
+ ],
+ "attempts": [
+  {
+   "ftol": 1e-05,
+   "status": 0,
+   "message": "Optimization terminated successfully",
+   "nit": 88,
+   "W": 86544.69709407385
+  }
+ ],
+ "success": true,
+ "final_status": 0,
+ "elapsed_s": 9.979257345199585,
+ "Tlo": 0.5,
+ "miu_lo": 0.01,
+ "cprice_cap": 1000.0,
+ "k0": 370,
+ "min_T": 0.5000000006656183
+}

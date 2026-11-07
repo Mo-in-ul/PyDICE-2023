@@ -1,0 +1,44 @@
+{
+ "scenario": 2,
+ "name": "2% discounting",
+ "welfare_gap_pct": 0.007937985920058985,
+ "max_dT_to_2100": 0.0026514190591315767,
+ "max_dT_to_2215": 0.0026514190591315767,
+ "peak_T_pydice": 2.0725777484335954,
+ "peak_T_gams": 2.0700472152,
+ "MIU_2030": [
+  0.23999998781216528,
+  0.24
+ ],
+ "MIU_2050": [
+  0.659838054974658,
+  0.660450248
+ ],
+ "SCC_2025": [
+  213.06826925619782,
+  206.9971636031
+ ],
+ "SCC_2050": [
+  311.98774188878554,
+  302.130702929
+ ],
+ "ECO2_2030": [
+  41.50798979511969,
+  41.5069833937
+ ],
+ "model_only_max_dT_to_2215": 5.565703453669357e-11,
+ "gams_capital_disposal_pct": 3.907759360695441e-11,
+ "gams_capital_disposal_year": 2035,
+ "irf_max_residual": 3.8323584661270615e-06,
+ "infeasible": false,
+ "elapsed_s": 25.368739366531372,
+ "meta": {
+  "scenario": 2,
+  "infeasible": false,
+  "success": true,
+  "message": "Optimization terminated successfully",
+  "iterations": 136,
+  "irf_max_residual": 3.8323584661270615e-06,
+  "peak_temp": 2.0725777484335954
+ }
+}

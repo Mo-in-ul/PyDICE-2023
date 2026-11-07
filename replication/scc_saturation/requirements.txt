@@ -1,0 +1,16 @@
+# Versions used for the results in the manuscript (Linux, Python 3.13)
+numpy==2.5.3
+scipy==1.18.1
+pandas==3.0.5
+openpyxl==3.1.5
+numba==0.68.1
+jax==0.12.0.1
+jaxlib==0.12.0.1
+cyipopt==1.7.0
+fair==2.2.5
+scikit-learn==1.9.1
+SALib==1.6.0
+matplotlib==3.11.2
+seaborn==0.13.2
+gymnasium==1.4.0
+pytest==9.1.1

@@ -1,0 +1,122 @@
+[
+ {
+  "calibration": "DICE-2023",
+  "config": "published",
+  "success": true,
+  "share_2025": 0.13040029677963322,
+  "scc_2025": 59.066756110898424,
+  "first_net_negative_year": 2120,
+  "first_negative_flux_year": 2140,
+  "first_negative_feedback_pulse_year": 2110,
+  "peak_T": 2.6011331643796476,
+  "min_E_GtCO2": -36.759580336067145
+ },
+ {
+  "calibration": "DICE-2023",
+  "config": "cap_1.00",
+  "success": true,
+  "share_2025": 0.14812903083868348,
+  "scc_2025": 63.009279566444675,
+  "first_net_negative_year": null,
+  "first_negative_flux_year": null,
+  "first_negative_feedback_pulse_year": null,
+  "peak_T": 2.472829372221773,
+  "min_E_GtCO2": 2.50044498423077e-06
+ },
+ {
+  "calibration": "DICE-2023",
+  "config": "cap_1.05",
+  "success": true,
+  "share_2025": 0.13489822635717422,
+  "scc_2025": 60.346206362910806,
+  "first_net_negative_year": 2120,
+  "first_negative_flux_year": 2160,
+  "first_negative_feedback_pulse_year": 2125,
+  "peak_T": 2.5534576261961615,
+  "min_E_GtCO2": -36.72579440265988
+ },
+ {
+  "calibration": "DICE-2023",
+  "config": "deep_1.20",
+  "success": true,
+  "share_2025": 0.13163584902866757,
+  "scc_2025": 56.92560604448878,
+  "first_net_negative_year": 2130,
+  "first_negative_flux_year": 2155,
+  "first_negative_feedback_pulse_year": 2105,
+  "peak_T": 2.704492778886572,
+  "min_E_GtCO2": -59.601861922377815
+ },
+ {
+  "calibration": "DICE-2023",
+  "config": "early_2070",
+  "success": true,
+  "share_2025": 0.13040029270940653,
+  "scc_2025": 59.066755172676835,
+  "first_net_negative_year": 2120,
+  "first_negative_flux_year": 2140,
+  "first_negative_feedback_pulse_year": 2110,
+  "peak_T": 2.6011331845325976,
+  "min_E_GtCO2": -36.759580345833854
+ },
+ {
+  "calibration": "slow saturation",
+  "config": "published",
+  "success": true,
+  "share_2025": 0.11664007009870539,
+  "scc_2025": 49.505965393942034,
+  "first_net_negative_year": 2125,
+  "first_negative_flux_year": 2140,
+  "first_negative_feedback_pulse_year": 2125,
+  "peak_T": 2.518643747684588,
+  "min_E_GtCO2": -36.75024850739695
+ },
+ {
+  "calibration": "slow saturation",
+  "config": "cap_1.00",
+  "success": true,
+  "share_2025": 0.1301719680224947,
+  "scc_2025": 52.102572890498685,
+  "first_net_negative_year": null,
+  "first_negative_flux_year": null,
+  "first_negative_feedback_pulse_year": null,
+  "peak_T": 2.416450729882696,
+  "min_E_GtCO2": 3.45442010651056e-06
+ },
+ {
+  "calibration": "slow saturation",
+  "config": "cap_1.05",
+  "success": true,
+  "share_2025": 0.11989307405341483,
+  "scc_2025": 50.29019205210369,
+  "first_net_negative_year": 2120,
+  "first_negative_flux_year": 2150,
+  "first_negative_feedback_pulse_year": 2145,
+  "peak_T": 2.4836131845745997,
+  "min_E_GtCO2": -36.71930716230817
+ },
+ {
+  "calibration": "slow saturation",
+  "config": "deep_1.20",
+  "success": true,
+  "share_2025": 0.1165414892428487,
+  "scc_2025": 47.76519405567144,
+  "first_net_negative_year": 2135,
+  "first_negative_flux_year": 2155,
+  "first_negative_feedback_pulse_year": 2115,
+  "peak_T": 2.6188568587582157,
+  "min_E_GtCO2": -66.10576354559689
+ },
+ {
+  "calibration": "slow saturation",
+  "config": "early_2070",
+  "success": true,
+  "share_2025": 0.11664006974110692,
+  "scc_2025": 49.505965323817954,
+  "first_net_negative_year": 2125,
+  "first_negative_flux_year": 2140,
+  "first_negative_feedback_pulse_year": 2125,
+  "peak_T": 2.5186437315692105,
+  "min_E_GtCO2": -36.75024841832974
+ }
+]

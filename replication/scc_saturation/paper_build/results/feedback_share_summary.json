@@ -1,0 +1,37 @@
+{
+ "9": {
+  "share_2025": 13.040023643909052,
+  "share_2050": 8.953379650796908,
+  "share_2100": 0.9109123061234314,
+  "first_net_negative_year": 2120,
+  "first_negative_share_year": 2110
+ },
+ "8": {
+  "share_2025": 19.844955994792564,
+  "share_2050": 17.03783586101278,
+  "share_2100": 12.166690406328335,
+  "first_net_negative_year": null,
+  "first_negative_share_year": null
+ },
+ "10": {
+  "share_2025": 23.886262229366782,
+  "share_2050": 21.155334881976852,
+  "share_2100": 15.523701818564017,
+  "first_net_negative_year": null,
+  "first_negative_share_year": null
+ },
+ "4": {
+  "share_2025": 14.428166347146515,
+  "share_2050": 10.683537927050919,
+  "share_2100": 4.44715325197737,
+  "first_net_negative_year": 2140,
+  "first_negative_share_year": 2140
+ },
+ "5": {
+  "share_2025": 12.370588256736353,
+  "share_2050": 9.40638207029636,
+  "share_2100": 4.717238381172855,
+  "first_net_negative_year": 2145,
+  "first_negative_share_year": 2160
+ }
+}

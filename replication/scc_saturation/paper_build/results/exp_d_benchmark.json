@@ -1,0 +1,46 @@
+{
+ "machine": {
+  "cpu": "x86_64",
+  "python": "3.13.18",
+  "jax": "0.12.0.1",
+  "threads": "default"
+ },
+ "repeats": 20,
+ "exact_compile_and_first_call_s": 2.640276763999964,
+ "exact_all_periods": {
+  "median_s": 0.001741054999968128,
+  "min_s": 0.0015090929999814762,
+  "max_s": 0.002371360999973149,
+  "n": 20
+ },
+ "fd_resp_first_call_s": 2.7586779380000053,
+ "fd_responsive_2025_2200": {
+  "median_s": 2.7108231529999784,
+  "min_s": 2.648530973999982,
+  "max_s": 2.8354838220000147,
+  "n": 5
+ },
+ "fd_fixed_2025_2200": {
+  "median_s": 0.004995786999984375,
+  "min_s": 0.004947631000050023,
+  "max_s": 0.0050832089999630625,
+  "n": 5
+ },
+ "accuracy": {
+  "periods_compared": 36,
+  "years": [
+   2025,
+   2200
+  ],
+  "exact_total_vs_fd_responsive_max_rel": 2.27227215357582e-08,
+  "exact_total_vs_fd_responsive_2025_rel": 1.0653321961901502e-08,
+  "exact_direct_vs_fd_fixed_max_rel": 1.233155598249075e-08,
+  "scc_2025": {
+   "exact": 59.066737632393625,
+   "fd_responsive": 59.06673700313666,
+   "fd_fixed": 51.364421157174036,
+   "exact_direct": 51.364421079443765
+  }
+ },
+ "speedup_vs_fd_responsive": 1557.0002975492464
+}

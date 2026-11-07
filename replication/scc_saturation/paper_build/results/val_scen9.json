@@ -1,0 +1,44 @@
+{
+ "scenario": 9,
+ "name": "Cost-benefit optimal",
+ "welfare_gap_pct": -5.936216548186832e-09,
+ "max_dT_to_2100": 5.3011902592103866e-06,
+ "max_dT_to_2215": 8.552331583366879e-06,
+ "peak_T_pydice": 2.601140882960521,
+ "peak_T_gams": 2.6011335415,
+ "MIU_2030": [
+  0.23999999999999624,
+  0.24
+ ],
+ "MIU_2050": [
+  0.39194331165314206,
+  0.3919442683
+ ],
+ "SCC_2025": [
+  59.06685291927404,
+  59.0665492061
+ ],
+ "SCC_2050": [
+  124.54059176931219,
+  124.5398308848
+ ],
+ "ECO2_2030": [
+  38.14715398462876,
+  38.1472793189
+ ],
+ "model_only_max_dT_to_2215": 9.194423000735696e-11,
+ "gams_capital_disposal_pct": 5.776889000019324e-11,
+ "gams_capital_disposal_year": 2025,
+ "irf_max_residual": 3.001240216349288e-07,
+ "infeasible": false,
+ "elapsed_s": 19.430946588516235,
+ "meta": {
+  "scenario": 9,
+  "infeasible": false,
+  "success": true,
+  "message": "Optimization terminated successfully",
+  "iterations": 71,
+  "irf_max_residual": 3.001240216349288e-07,
+  "peak_temp": 2.601140882960521
+ }
+}
