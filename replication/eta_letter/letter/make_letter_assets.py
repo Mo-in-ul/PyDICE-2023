@@ -44,7 +44,7 @@ ax.fill_betweenx(yfill, bfill, XMAX, color='#f9cdb6', lw=0, zorder=0)
 rdec = yfill / 100.0; phi0 = np.sqrt(2 * (1 - np.exp(-(rdec + 0.5 * 0.05))) / (0.01 ** 2 * 235))
 matplotlib.rcParams['hatch.linewidth'] = 0.4
 ax.fill_betweenx(yfill, np.minimum(phi0, XMAX), XMAX, facecolor='none', edgecolor='0.55', hatch='////', lw=0, zorder=1)
-ax.plot(phi0, yfill, color='0.4', lw=0.8, ls='--', zorder=3, label=r'$\varphi_0(\rho)$: zero long-run discount rate')
+ax.plot(phi0, yfill, color='0.4', lw=0.8, ls='--', zorder=3, label=r'$\varphi_0(\rho)$: zero long-run utility discount rate')
 ax.plot(PchipInterpolator(ys, pm)(yfill), yfill, color='k', lw=2.0, zorder=5, label=r'SCC-minimizing $\varphi$ (computed)')
 ax.plot(pm, ys, ls='none', marker='o', ms=3.5, color='k', zorder=6, clip_on=False)
 pts = [('DICE-23', 0.1, 0.95), ('Stern', 0.1, 1.0), ('Drupp md', 0.5, 1.0), ('Drupp mn', 1.1, 1.35), ('NPP2', 0.1, 1.25), ('NPP2.5', 0.4, 1.4), ('NPP3', 0.8, 1.53), ('DICE-16R', 1.5, 1.45)]
@@ -75,7 +75,7 @@ nb = {o['eta']: o['scc_2025'] for o in L('blockV/results/v14_grid.json') if o['v
 f = lambda v: f'{v:+.1f}'
 lines = [r'\begin{tabular}{lrrrr}', r'\toprule',
          r'\multicolumn{5}{l}{\emph{A. $d\,\mathrm{SCC}/d\varphi$ split into weights at fixed policy and re-optimization (no floor)}} \\',
-         r'$\varphi$ & Total & Weights & Weights, Prop.~1 & Re-optimization \\', r'\midrule']
+         r'$\varphi$ & Total & Weights & Weights, Eq.~\eqref{eq:agg} & Re-optimization \\', r'\midrule']
 for e in (0.95, 1.1, 1.3, 1.5):
     o = sp[e]; lines.append(f"{e:.2f} & {f(o['total'])} & {f(o['direct'])} & {f(o['direct_analytic'])} & {f(o['indirect'])} \\\\")
 lines += [r'\midrule', r'\multicolumn{5}{l}{\emph{B. Change in SCC when $\varphi_{\mathrm u}$, $\varphi_{\mathrm p}$ or both move from 0.95 to 1.3 (no floor)}} \\',

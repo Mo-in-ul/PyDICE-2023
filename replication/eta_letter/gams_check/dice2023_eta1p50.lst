@@ -1,0 +1,477 @@
+Executed on prod-exec-7.neos-server.org
+GAMS 54.7.0  8b4e16d1 Nov 9, 2026           LEX-LEG x86 64bit/Linux - 11/24/26 18:38:14 Page 1
+October 12, 2023 (DICE2023-b-4-3-10.gms)
+C o m p i l a t i o n
+
+
+
+
+COMPILATION TIME     =        0.002 SECONDS      3 MB  54.7.0 8b4e16d1 LEX-LEG
+GAMS 54.7.0  8b4e16d1 Nov 9, 2026           LEX-LEG x86 64bit/Linux - 11/24/26 18:38:14 Page 2
+October 12, 2023 (DICE2023-b-4-3-10.gms)
+Range Statistics    SOLVE CO2 Using NLP From line 376
+
+
+RANGE STATISTICS (ABSOLUTE NON-ZERO FINITE VALUES)
+
+RHS       [min, max] : [ 5.813E-03, 6.276E+03] - Zero values observed as well
+Bound     [min, max] : [ 1.000E-04, 1.000E+06] - Zero values observed as well
+Matrix    [min, max] : [ 2.000E-07, 2.060E+08] - Zero values observed as well
+
+GAMS 54.7.0  8b4e16d1 Nov 9, 2026           LEX-LEG x86 64bit/Linux - 11/24/26 18:38:14 Page 3
+October 12, 2023 (DICE2023-b-4-3-10.gms)
+Model Statistics    SOLVE CO2 Using NLP From line 376
+
+
+MODEL STATISTICS
+
+BLOCKS OF EQUATIONS          35     SINGLE EQUATIONS        2,741
+BLOCKS OF VARIABLES          37     SINGLE VARIABLES        2,915  563
+ projected
+NON ZERO ELEMENTS         8,054     NON LINEAR N-Z          3,061
+CODE LENGTH              21,666     CONSTANT POOL             761
+
+
+GENERATION TIME      =        0.016 SECONDS      5 MB  54.7.0 8b4e16d1 LEX-LEG
+GAMS 54.7.0  8b4e16d1 Nov 9, 2026           LEX-LEG x86 64bit/Linux - 11/24/26 18:38:14 Page 4
+October 12, 2023 (DICE2023-b-4-3-10.gms)
+Solution Report     SOLVE CO2 Using NLP From line 376
+
+
+               S O L V E      S U M M A R Y
+
+     MODEL   CO2                 OBJECTIVE  UTILITY
+     TYPE    NLP                 DIRECTION  MAXIMIZE
+     SOLVER  CONOPT4             FROM LINE  376
+
+**** SOLVER STATUS     1 Normal Completion
+**** MODEL STATUS      2 Locally Optimal
+**** OBJECTIVE VALUE            20764.6920
+
+ RESOURCE USAGE, LIMIT          5.238     99999.000
+ ITERATION COUNT, LIMIT       161         99900
+ EVALUATION ERRORS              0             0
+ 
+ 
+    C O N O P T   version 4.39.3
+    Copyright (C) GAMS Software GmbH
+                  GAMS Development Corporation
+ 
+ 
+    The user model has 2741 constraints and 2915 variables
+    with 8054 Jacobian elements, 3061 of which are nonlinear.
+    The Hessian of the Lagrangian has 648 elements on the diagonal,
+    803 elements below the diagonal, and 1372 nonlinear variables.
+ 
+    The pre-triangular part of the model has 8 constraints and 64 variables.
+    The post-triangular part of the model has 727 constraints and variables.
+    There are 721 definitional constraints and defined variables.
+ 
+    Preprocessed model has 1285 constraints and 1403 variables
+    with 5943 Jacobian elements, 2639 of which are nonlinear.
+ 
+ ** Optimal solution. Reduced gradient less than tolerance.
+ 
+ ** Scaled model is feasible, but some unscaled residuals are large due
+    to large scale factors.
+    Largest unscaled residual is 7.80E-04 based on scale factor 1.64E+04
+ 
+ 
+ CONOPT time Total                            5.177 seconds
+   of which: Function evaluations             1.655 = 32.0%
+             1st Derivative evaluations       0.293 =  5.7%
+             2nd Derivative evaluations       0.027 =  0.5%
+             Directional 2nd Deriv(Hess)      0.014 =  0.3%
+             Interval derivative evals        0.017 =  0.3%
+ 
+
+
+**** REPORT SUMMARY :        0     NONOPT
+                             0 INFEASIBLE
+                             0  UNBOUNDED
+                             0     ERRORS
+GAMS 54.7.0  8b4e16d1 Nov 9, 2026           LEX-LEG x86 64bit/Linux - 11/24/26 18:38:14 Page 5
+October 12, 2023 (DICE2023-b-4-3-10.gms)
+Range Statistics    SOLVE CO2 Using NLP From line 384
+
+
+RANGE STATISTICS (ABSOLUTE NON-ZERO FINITE VALUES)
+
+RHS       [min, max] : [ 5.813E-03, 6.276E+03] - Zero values observed as well
+Bound     [min, max] : [ 1.000E-04, 1.000E+06] - Zero values observed as well
+Matrix    [min, max] : [ 4.603E-19, 8.766E+04] - Zero values observed as well
+
+GAMS 54.7.0  8b4e16d1 Nov 9, 2026           LEX-LEG x86 64bit/Linux - 11/24/26 18:38:14 Page 6
+October 12, 2023 (DICE2023-b-4-3-10.gms)
+Model Statistics    SOLVE CO2 Using NLP From line 384
+
+
+MODEL STATISTICS
+
+BLOCKS OF EQUATIONS          35     SINGLE EQUATIONS        2,741
+BLOCKS OF VARIABLES          37     SINGLE VARIABLES        2,915
+NON ZERO ELEMENTS         8,054     NON LINEAR N-Z          3,061
+CODE LENGTH              21,666     CONSTANT POOL             761
+
+
+GENERATION TIME      =        0.018 SECONDS      5 MB  54.7.0 8b4e16d1 LEX-LEG
+GAMS 54.7.0  8b4e16d1 Nov 9, 2026           LEX-LEG x86 64bit/Linux - 11/24/26 18:38:14 Page 7
+October 12, 2023 (DICE2023-b-4-3-10.gms)
+Solution Report     SOLVE CO2 Using NLP From line 384
+
+
+               S O L V E      S U M M A R Y
+
+     MODEL   CO2                 OBJECTIVE  UTILITY
+     TYPE    NLP                 DIRECTION  MAXIMIZE
+     SOLVER  CONOPT4             FROM LINE  384
+
+**** SOLVER STATUS     1 Normal Completion
+**** MODEL STATUS      2 Locally Optimal
+**** OBJECTIVE VALUE            20764.6920
+
+ RESOURCE USAGE, LIMIT          0.192     99999.000
+ ITERATION COUNT, LIMIT         3         99900
+ EVALUATION ERRORS              0             0
+ 
+ 
+    C O N O P T   version 4.39.3
+    Copyright (C) GAMS Software GmbH
+                  GAMS Development Corporation
+ 
+ 
+    The user model has 2741 constraints and 2915 variables
+    with 8054 Jacobian elements, 3061 of which are nonlinear.
+    The Hessian of the Lagrangian has 648 elements on the diagonal,
+    803 elements below the diagonal, and 1372 nonlinear variables.
+ 
+    The pre-triangular part of the model has 8 constraints and 64 variables.
+    The post-triangular part of the model has 727 constraints and variables.
+    There are 785 definitional constraints and defined variables.
+ 
+    Preprocessed model has 1221 constraints and 1339 variables
+    with 6241 Jacobian elements, 3066 of which are nonlinear.
+ 
+ ** Optimal solution. Reduced gradient less than tolerance.
+ 
+ 
+ CONOPT time Total                            0.145 seconds
+   of which: Function evaluations             0.015 = 10.3%
+             1st Derivative evaluations       0.011 =  7.6%
+             2nd Derivative evaluations       0.002 =  1.4%
+             Interval derivative evals        0.024 = 16.6%
+ 
+
+
+**** REPORT SUMMARY :        0     NONOPT
+                             0 INFEASIBLE
+                             0  UNBOUNDED
+                             0     ERRORS
+GAMS 54.7.0  8b4e16d1 Nov 9, 2026           LEX-LEG x86 64bit/Linux - 11/24/26 18:38:14 Page 8
+October 12, 2023 (DICE2023-b-4-3-10.gms)
+Range Statistics    SOLVE CO2 Using NLP From line 385
+
+
+RANGE STATISTICS (ABSOLUTE NON-ZERO FINITE VALUES)
+
+RHS       [min, max] : [ 5.813E-03, 6.276E+03] - Zero values observed as well
+Bound     [min, max] : [ 1.000E-04, 1.000E+06] - Zero values observed as well
+Matrix    [min, max] : [ 4.603E-19, 8.766E+04] - Zero values observed as well
+
+GAMS 54.7.0  8b4e16d1 Nov 9, 2026           LEX-LEG x86 64bit/Linux - 11/24/26 18:38:14 Page 9
+October 12, 2023 (DICE2023-b-4-3-10.gms)
+Model Statistics    SOLVE CO2 Using NLP From line 385
+
+
+MODEL STATISTICS
+
+BLOCKS OF EQUATIONS          35     SINGLE EQUATIONS        2,741
+BLOCKS OF VARIABLES          37     SINGLE VARIABLES        2,915
+NON ZERO ELEMENTS         8,054     NON LINEAR N-Z          3,061
+CODE LENGTH              21,666     CONSTANT POOL             761
+
+
+GENERATION TIME      =        0.018 SECONDS      5 MB  54.7.0 8b4e16d1 LEX-LEG
+GAMS 54.7.0  8b4e16d1 Nov 9, 2026           LEX-LEG x86 64bit/Linux - 11/24/26 18:38:14 Page 10
+October 12, 2023 (DICE2023-b-4-3-10.gms)
+Solution Report     SOLVE CO2 Using NLP From line 385
+
+
+               S O L V E      S U M M A R Y
+
+     MODEL   CO2                 OBJECTIVE  UTILITY
+     TYPE    NLP                 DIRECTION  MAXIMIZE
+     SOLVER  CONOPT4             FROM LINE  385
+
+**** SOLVER STATUS     1 Normal Completion
+**** MODEL STATUS      2 Locally Optimal
+**** OBJECTIVE VALUE            20764.6920
+
+ RESOURCE USAGE, LIMIT          0.185     99999.000
+ ITERATION COUNT, LIMIT         1         99900
+ EVALUATION ERRORS              0             0
+ 
+ 
+    C O N O P T   version 4.39.3
+    Copyright (C) GAMS Software GmbH
+                  GAMS Development Corporation
+ 
+ 
+    The user model has 2741 constraints and 2915 variables
+    with 8054 Jacobian elements, 3061 of which are nonlinear.
+    The Hessian of the Lagrangian has 648 elements on the diagonal,
+    803 elements below the diagonal, and 1372 nonlinear variables.
+ 
+    The pre-triangular part of the model has 8 constraints and 64 variables.
+    The post-triangular part of the model has 727 constraints and variables.
+    There are 785 definitional constraints and defined variables.
+ 
+    Preprocessed model has 1221 constraints and 1339 variables
+    with 6241 Jacobian elements, 3066 of which are nonlinear.
+ 
+ ** Optimal solution. Reduced gradient less than tolerance.
+ 
+ 
+ CONOPT time Total                            0.135 seconds
+   of which: Function evaluations             0.013 =  9.6%
+             1st Derivative evaluations       0.013 =  9.6%
+             2nd Derivative evaluations       0.002 =  1.5%
+             Interval derivative evals        0.032 = 23.7%
+ 
+
+
+**** REPORT SUMMARY :        0     NONOPT
+                             0 INFEASIBLE
+                             0  UNBOUNDED
+                             0     ERRORS
+GAMS 54.7.0  8b4e16d1 Nov 9, 2026           LEX-LEG x86 64bit/Linux - 11/24/26 18:38:14 Page 11
+October 12, 2023 (DICE2023-b-4-3-10.gms)
+Range Statistics    SOLVE CO2 Using NLP From line 386
+
+
+RANGE STATISTICS (ABSOLUTE NON-ZERO FINITE VALUES)
+
+RHS       [min, max] : [ 5.813E-03, 6.276E+03] - Zero values observed as well
+Bound     [min, max] : [ 1.000E-04, 1.000E+06] - Zero values observed as well
+Matrix    [min, max] : [ 4.603E-19, 8.766E+04] - Zero values observed as well
+
+GAMS 54.7.0  8b4e16d1 Nov 9, 2026           LEX-LEG x86 64bit/Linux - 11/24/26 18:38:14 Page 12
+October 12, 2023 (DICE2023-b-4-3-10.gms)
+Model Statistics    SOLVE CO2 Using NLP From line 386
+
+
+MODEL STATISTICS
+
+BLOCKS OF EQUATIONS          35     SINGLE EQUATIONS        2,741
+BLOCKS OF VARIABLES          37     SINGLE VARIABLES        2,915
+NON ZERO ELEMENTS         8,054     NON LINEAR N-Z          3,061
+CODE LENGTH              21,666     CONSTANT POOL             761
+
+
+GENERATION TIME      =        0.018 SECONDS      5 MB  54.7.0 8b4e16d1 LEX-LEG
+GAMS 54.7.0  8b4e16d1 Nov 9, 2026           LEX-LEG x86 64bit/Linux - 11/24/26 18:38:14 Page 13
+October 12, 2023 (DICE2023-b-4-3-10.gms)
+Solution Report     SOLVE CO2 Using NLP From line 386
+
+
+               S O L V E      S U M M A R Y
+
+     MODEL   CO2                 OBJECTIVE  UTILITY
+     TYPE    NLP                 DIRECTION  MAXIMIZE
+     SOLVER  CONOPT4             FROM LINE  386
+
+**** SOLVER STATUS     1 Normal Completion
+**** MODEL STATUS      2 Locally Optimal
+**** OBJECTIVE VALUE            20764.6920
+
+ RESOURCE USAGE, LIMIT          0.181     99999.000
+ ITERATION COUNT, LIMIT         1         99900
+ EVALUATION ERRORS              0             0
+ 
+ 
+    C O N O P T   version 4.39.3
+    Copyright (C) GAMS Software GmbH
+                  GAMS Development Corporation
+ 
+ 
+    The user model has 2741 constraints and 2915 variables
+    with 8054 Jacobian elements, 3061 of which are nonlinear.
+    The Hessian of the Lagrangian has 648 elements on the diagonal,
+    803 elements below the diagonal, and 1372 nonlinear variables.
+ 
+    The pre-triangular part of the model has 8 constraints and 64 variables.
+    The post-triangular part of the model has 727 constraints and variables.
+    There are 785 definitional constraints and defined variables.
+ 
+    Preprocessed model has 1221 constraints and 1339 variables
+    with 6241 Jacobian elements, 3066 of which are nonlinear.
+ 
+ ** Optimal solution. Reduced gradient less than tolerance.
+ 
+ 
+ CONOPT time Total                            0.127 seconds
+   of which: Function evaluations             0.011 =  8.7%
+             1st Derivative evaluations       0.019 = 15.0%
+             2nd Derivative evaluations       0.001 =  0.8%
+             Interval derivative evals        0.026 = 20.5%
+ 
+
+
+**** REPORT SUMMARY :        0     NONOPT
+                             0 INFEASIBLE
+                             0  UNBOUNDED
+                             0     ERRORS
+GAMS 54.7.0  8b4e16d1 Nov 9, 2026           LEX-LEG x86 64bit/Linux - 11/24/26 18:38:14 Page 14
+October 12, 2023 (DICE2023-b-4-3-10.gms)
+E x e c u t i o n
+
+
+----    402 PARAMETER elasmu               =   1.50000000  Elasticity of margin
+                                                           al utility of consum
+                                                           ption
+            MODEL CO2.ModelStat            =   2.00000000 
+            MODEL CO2.SolveStat            =   1.00000000 
+            VARIABLE UTILITY.L             =  2.076469E+4  Welfare function
+            PARAMETER scc2025              =  56.26053908 
+            PARAMETER scc2050              =  1.422441E+2 
+            PARAMETER peakT                =   2.31152074 
+            PARAMETER peakyear             =  2.090000E+3 
+
+----    403 PARAMETER scc  Social cost of carbon
+
+1   6.52586389,    2  56.26053908,    3  68.11591566,    4  82.33308289
+5  99.23003351,    6  1.190980E+2,    7  1.422441E+2,    8  1.689672E+2
+9  1.995780E+2,    10 2.343651E+2,    11 2.735930E+2,    12 3.174995E+2
+13 3.663069E+2,    14 4.202601E+2,    15 4.797192E+2,    16 5.453465E+2
+17 6.182302E+2,    18 6.980136E+2,    19 7.840350E+2,    20 8.751330E+2
+21 9.718504E+2,    22 1.074087E+3,    23 1.181273E+3,    24 1.292121E+3
+25 1.405129E+3,    26 1.518619E+3,    27 1.630757E+3,    28 1.739568E+3
+29 1.842973E+3,    30 1.938825E+3,    31 2.024938E+3,    32 2.099129E+3
+33 2.159275E+3,    34 2.203368E+3,    35 2.229562E+3,    36 2.236229E+3
+37 2.221997E+3,    38 2.645212E+3,    39 2.518992E+3,    40 2.398847E+3
+41 2.275870E+3,    42 2.144224E+3,    43 2.000372E+3,    44 1.842620E+3
+45 1.670795E+3,    46 1.486011E+3,    47 1.290554E+3,    48 1.088060E+3
+49 1.016041E+3,    50 9.271764E+2,    51 8.171520E+2,    52 6.821406E+2
+53 5.330512E+2,    54 5.134113E+2,    55 5.119548E+2,    56 4.766568E+2
+57 4.760158E+2,    58 3.061131E+3,    59 3.203264E+3,    60 3.338552E+3
+61 3.465325E+3,    62 3.582720E+3,    63 3.689679E+3,    64 3.784762E+3
+65 3.866154E+3,    66 3.931694E+3,    67 3.978897E+3,    68 4.004971E+3
+69 4.006811E+3,    70 3.980993E+3,    71 3.923757E+3,    72 3.830983E+3
+73 3.698174E+3,    74 3.520416E+3,    75 3.292352E+3,    76 3.008162E+3
+77 2.661592E+3,    78 2.246215E+3,    79 1.756527E+3,    80 1.192155E+3
+81 5.734775E+2
+
+
+----    403 VARIABLE TATM.L  Increase temperature of atmosphere (degrees C from
+                             1765)
+
+1  1.24715000,    2  1.42352804,    3  1.54331414,    4  1.64306815
+5  1.73550939,    6  1.82331399,    7  1.90617579,    8  1.98440471
+9  2.05752605,    10 2.12443919,    11 2.18379275,    12 2.23405418
+13 2.27349001,    14 2.30010280,    15 2.31152074,    16 2.30508043
+17 2.29434617,    18 2.27935104,    19 2.26547451,    20 2.25378637
+21 2.21860841,    22 2.17440011,    23 2.12894617,    24 2.08351076
+25 2.03783325,    26 1.99138855,    27 1.94366052,    28 1.89417614
+29 1.84249713,    30 1.78824913,    31 1.73107884,    32 1.67064059
+33 1.60659104,    34 1.53858621,    35 1.46627885,    36 1.38931584
+37 1.30733535,    38 1.26961893,    39 1.23923705,    40 1.20729499
+41 1.17217984,    42 1.13358160,    43 1.09140798,    44 1.04561123
+45 0.99616416,    46 0.94305596,    47 0.88629010,    48 0.82588303
+49 0.76186371,    50 0.69427387,    51 0.62316904,    52 0.54862050
+53 0.50000000,    54 0.50000000,    55 0.50000000,    56 0.57023101
+57 0.50000000,    58 0.50482808,    59 0.51861672,    60 0.53089000
+61 0.54025819,    62 0.54724896,    63 0.55256790,    64 0.55674982
+65 0.56014925,    66 0.56299149,    67 0.56541889,    68 0.56752266
+69 0.56936295,    70 0.57098101,    71 0.57240647,    72 0.57366164
+73 0.57476412,    74 0.57572838,    75 0.57656666,    76 0.57728960
+77 0.57790661,    78 0.57842612,    79 0.57885576,    80 0.57920245
+81 0.57947255
+
+
+----    403 VARIABLE MIU.L  Emission control rate GHGs
+
+1  0.05000000,    2  0.10000000,    3  0.23754452,    4  0.27429163
+5  0.31651640,    6  0.36467807,    7  0.41927685,    8  0.46747704
+9  0.51974193,    10 0.57609830,    11 0.63654587,    12 0.70106678
+13 0.76965223,    14 0.84236012,    15 0.91942522,    16 1.00000000
+17 1.00000000,    18 1.00000000,    19 1.00000000,    20 1.00000000
+21 1.10000000,    22 1.10000000,    23 1.10000000,    24 1.10000000
+25 1.10000000,    26 1.10000000,    27 1.10000000,    28 1.10000000
+29 1.10000000,    30 1.10000000,    31 1.10000000,    32 1.10000000
+33 1.10000000,    34 1.10000000,    35 1.10000000,    36 1.10000000
+37 1.10000000,    38 1.05000000,    39 1.05000000,    40 1.05000000
+41 1.05000000,    42 1.05000000,    43 1.05000000,    44 1.05000000
+45 1.05000000,    46 1.05000000,    47 1.05000000,    48 1.05000000
+49 1.05000000,    50 1.05000000,    51 1.05000000,    52 1.05000000
+53 1.03577703,    54 1.01280091,    55 1.01342692,    56 0.97809717
+57 1.04195110,    58 1.00000000,    59 1.00000000,    60 1.00000000
+61 1.00000000,    62 1.00000000,    63 1.00000000,    64 1.00000000
+65 1.00000000,    66 1.00000000,    67 1.00000000,    68 1.00000000
+69 1.00000000,    70 1.00000000,    71 1.00000000,    72 1.00000000
+73 1.00000000,    74 1.00000000,    75 1.00000000,    76 1.00000000
+77 1.00000000,    78 1.00000000,    79 1.00000000,    80 1.00000000
+81 1.00000000
+
+
+----    403 VARIABLE S.L  Gross savings rate as fraction of gross world product
+
+1  0.22854644,    2  0.23052923,    3  0.23125843,    4  0.23232400
+5  0.23344729,    6  0.23472889,    7  0.23619430,    8  0.23798600
+9  0.24008371,    10 0.24249552,    11 0.24520969,    12 0.24818113
+13 0.25130518,    14 0.25436922,    15 0.25696481,    16 0.25840440
+17 0.26215795,    18 0.26608293,    19 0.27052435,    20 0.27585395
+21 0.27714320,    22 0.28102125,    23 0.28491610,    24 0.28885285
+25 0.29285155,    26 0.29692633,    27 0.30108826,    28 0.30534831
+29 0.30972131,    30 0.31423940,    31 0.31893807,    32 0.32386980
+33 0.32911050,    34 0.33476792,    35 0.34099202,    36 0.34798724
+37 0.35602545,    38 0.28000000,    39 0.28000000,    40 0.28000000
+41 0.28000000,    42 0.28000000,    43 0.28000000,    44 0.28000000
+45 0.28000000,    46 0.28000000,    47 0.28000000,    48 0.28000000
+49 0.28000000,    50 0.28000000,    51 0.28000000,    52 0.28000000
+53 0.28000000,    54 0.28000000,    55 0.28000000,    56 0.28000000
+57 0.28000000,    58 0.28000000,    59 0.28000000,    60 0.28000000
+61 0.28000000,    62 0.28000000,    63 0.28000000,    64 0.28000000
+65 0.28000000,    66 0.28000000,    67 0.28000000,    68 0.28000000
+69 0.28000000,    70 0.28000000,    71 0.28000000,    72 0.28000000
+73 0.28000000,    74 0.28000000,    75 0.28000000,    76 0.28000000
+77 0.28000000,    78 0.28000000,    79 0.28000000,    80 0.28000000
+81 0.28000000
+
+
+----    403 VARIABLE CPC.L  Per capita consumption (thousands 2019 USD per year
+                            )
+
+1  13.34940711,    2  14.47137997,    3  15.79948454,    4  17.31646852
+5  19.01053572,    6  20.87820761,    7  22.92193887,    8  25.14689432
+9  27.56058410,    10 30.17246131,    11 32.99383316,    12 36.03830419
+13 39.32303302,    14 42.87141367,    15 46.71842871,    16 50.92136694
+17 55.57628469,    18 60.66540087,    19 66.18154123,    20 72.11081333
+21 78.52446140,    22 85.54269734,    23 93.17826669,    24 1.014534E+2
+25 1.103982E+2,    26 1.200484E+2,    27 1.304441E+2,    28 1.416290E+2
+29 1.536489E+2,    30 1.665509E+2,    31 1.803808E+2,    32 1.951806E+2
+33 2.109854E+2,    34 2.278176E+2,    35 2.456801E+2,    36 2.645454E+2
+37 2.843409E+2,    38 3.465330E+2,    39 3.641869E+2,    40 3.853167E+2
+41 4.096214E+2,    42 4.368830E+2,    43 4.669600E+2,    44 4.997755E+2
+45 5.353049E+2,    46 5.735654E+2,    47 6.146078E+2,    48 6.585088E+2
+49 7.053663E+2,    50 7.552949E+2,    51 8.084227E+2,    52 8.648893E+2
+53 9.250653E+2,    54 9.889705E+2,    55 1.056218E+3,    56 1.127940E+3
+57 1.202169E+3,    58 1.282812E+3,    59 1.367145E+3,    60 1.456266E+3
+61 1.550422E+3,    62 1.649859E+3,    63 1.754827E+3,    64 1.865582E+3
+65 1.982391E+3,    66 2.105527E+3,    67 2.235273E+3,    68 2.371921E+3
+69 2.515774E+3,    70 2.667142E+3,    71 2.826347E+3,    72 2.993720E+3
+73 3.169602E+3,    74 3.354346E+3,    75 3.548313E+3,    76 3.751875E+3
+77 3.965417E+3,    78 4.189331E+3,    79 4.424024E+3,    80 4.669912E+3
+81 4.927421E+3
+
+
+
+EXECUTION TIME       =        5.968 SECONDS      5 MB  54.7.0 8b4e16d1 LEX-LEG
+
+**** LIST OF STRAY NAMES - CHECK DECLARATIONS FOR SPURIOUS COMMAS
+**** STRAY NAME MU OF TYPE VAR 
+**** STRAY NAME ML OF TYPE VAR 
+
+
+USER: NEOS Server License - Production               G250831+0003Ac-GEN
+      University of Wisconsin-Madison                           DCE4604
+      License for teaching and research at degree granting institutions

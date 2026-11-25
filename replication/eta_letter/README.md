@@ -23,6 +23,7 @@ blockV/                 numerical verification: brute-force SCC, multi-start, ho
 stage2/                 the experiments behind the letter (s2_* to s8_*), see REPORT.md
   results/              saved results (JSON) of every run used in the letter
 blockV/results/         saved results of the verification runs
+gams_check/             cross-check against the original DICE-2023 GAMS program on NEOS (README.md, comparison.md)
 letter/
   make_letter_assets.py builds Figure 1 and Table 1 from the saved results
   fig_letter_main.pdf, tab_letter.tex   the figure and table as submitted
