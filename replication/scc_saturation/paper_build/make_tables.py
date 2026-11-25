@@ -167,7 +167,7 @@ def tlo_table():
 
 STEP_LABELS = {'submitted model': 'Submitted model', 'land': '+ control rate on land CO$_2$',
                'ccatot': '+ lagged cumulative emissions', 'fghg': '+ lagged other-GHG forcing',
-               'savings': '+ savings bounds', 'matfloor': '+ carbon floor 10 GtC',
+               'savings': '+ savings bounds', 'matfloor': '+ carbon floor 588 instead of 10 GtC',
                'tlo': '+ temperature floor 0.5\\,\\textdegree C', 'carry': '+ carried-over bounds',
                'miu1': '+ base MIU(2020)'}
 

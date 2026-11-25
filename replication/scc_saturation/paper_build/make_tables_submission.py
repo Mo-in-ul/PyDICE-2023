@@ -33,7 +33,7 @@ L = []
 for k in KEYS:
     L.append(f"{LAB[k]} & {f2(s['logscc_2025']['S1'][k])} & {f2(s['logscc_2025']['ST'][k])} & {m['2025']['S1'][k]:.2f} & {m['2100']['S1'][k]:.2f} \\\\")
 L += ['\\midrule', "Surrogate CV $R^2$ & \\multicolumn{2}{c}{" + f"{s['logscc_2025']['cv_r2_mean']:.2f}" + "} & & \\\\"]
-W('tab_sub_sobol.tex', "\\begin{tabular}{lrrrr}\n\\toprule\n & \\multicolumn{2}{c}{log SCC 2025} & \\multicolumn{2}{c}{Share, deciles} \\\\\n"
+W('tab_sub_sobol.tex', "\\begin{tabular}{lrrrr}\n\\toprule\n & \\multicolumn{2}{c}{log marginal damage 2025} & \\multicolumn{2}{c}{Share, deciles} \\\\\n"
   "\\cmidrule(lr){2-3}\\cmidrule(lr){4-5}\nParameter & $S_1$ & $S_T$ & 2025 & 2100 \\\\\n\\midrule\n" + '\n'.join(L) + "\n\\bottomrule\n\\end{tabular}\n")
 
 f = R('fair_own_weights.json')

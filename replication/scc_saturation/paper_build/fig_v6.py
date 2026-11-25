@@ -182,7 +182,7 @@ for shv in (0.05, 0.10, 0.20):
     ax.text(xs[-1] * 1.12, shv * xs[-1], f'{int(100 * shv)}%', fontsize=6.2, color='0.4', va='center', ha='left')
 ax.plot(59.07, 7.70, marker='*', color=ORANGE, ms=9, mec='white', mew=0.5, ls='none', label='DICE-2023')
 ax.set_xscale('log'); ax.set_yscale('log'); ax.set_xlim(1.5, 2200); ax.set_ylim(0.05, 250)
-ax.set_xlabel('SCC 2025 (2019 \\$/tCO$_2$)'); ax.set_ylabel('Feedback 2025 (2019 \\$/tCO$_2$)')
+ax.set_xlabel('Marginal damage 2025 (2019 \\$/tCO$_2$)'); ax.set_ylabel('Feedback 2025 (2019 \\$/tCO$_2$)')
 ax.legend(frameon=False, loc='upper left', fontsize=6.6); panel_label(ax, '(a)')
 cax = ax.inset_axes([0.62, 0.1, 0.3, 0.035]); cb = fig.colorbar(scp, cax=cax, orientation='horizontal')
 cb.ax.set_title('ECS ($^\\circ$C)', fontsize=6.2, pad=2); cb.ax.tick_params(labelsize=5.8, length=2)
@@ -233,7 +233,7 @@ for j, y in enumerate(yrs3):
         ax.plot([j - 0.07, j + 0.07], [qq, qq], color='0.45', lw=0.9)
     ax.plot(j + 0.27, G['gams'][G['years'].index(y)], marker='s', ms=3.5, color=ORANGE, ls='none', label='DICE-2023 optimum' if j == 0 else None)
 ax.set_yscale('log'); ax.set_xticks(range(3)); ax.set_xticklabels([str(y) for y in yrs3]); ax.set_xlim(-0.5, 2.6)
-ax.set_xlabel('Year of pulse'); ax.set_ylabel('SCC (2019 \\$/tCO$_2$)')
+ax.set_xlabel('Year of pulse'); ax.set_ylabel('Marginal damage (2019 \\$/tCO$_2$)')
 ax.legend(frameon=False, loc='upper left', fontsize=6.5)
 fig.tight_layout(); fig.savefig(os.path.join(FIG, 'fig_v6_scc_dist.pdf')); plt.close(fig)
 

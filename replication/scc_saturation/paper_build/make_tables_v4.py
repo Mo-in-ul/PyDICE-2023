@@ -49,7 +49,7 @@ w('tab_v4_policy.tex', '\\begin{tabular}{lrrrrrrrrrr}\n\\toprule\n & & \\multico
 
 # Experiment A: net-negative emissions and the sign change
 A = load_json('exp_a_removal_sign.json')
-LAB = {'published': 'DICE-2023 bound', 'cap_1.00': 'No control rate above 1', 'cap_1.05': 'Bound 1.05 throughout',
+LAB = {'published': 'DICE-2023 bound', 'cap_1.00': 'No control rate above 1', 'cap_1.05': 'Bound capped at 1.05',
        'deep_1.20': 'Bound 1.2 where above 1', 'early_2070': 'Bound 1.1 from 2070'}
 rows = []
 for cal in ('DICE-2023', 'slow saturation'):

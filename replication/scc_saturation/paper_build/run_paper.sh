@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Reproduce every number, table and figure of the manuscript "How Much of the Social Cost of Carbon Comes from
-# Carbon-Sink Saturation? Evidence from PyDICE-2023" (pydice2023_v6_submission_revised.tex). Run from paper_build/.
+# Reproduce every number, table and figure of the manuscript "Carbon-Sink Saturation and the Social Cost of Carbon:
+# The Role of Optimal Mitigation" (submitted to Environmental and Resource Economics). Run from paper_build/.
 # Times are rough, one core of a 2.8 GHz Xeon. Lines ending in & can run in parallel.
 set -euo pipefail
 cd "$(dirname "$0")"
@@ -49,12 +49,24 @@ python3 fallback_diag.py                > logs/fallback_diag.log 2>&1   # their 
 python3 sobol_bootstrap.py              > logs/sobol_boot.log 2>&1      # bootstrap refits of the Sobol surrogate
 python3 jacobian_check.py mc            > logs/jacobian.log 2>&1   # diagonal of dR/dalpha, Eq. (16); needs the MC results; re-solves 29 draws (~15 min)
 
-# 5. Appendices F and G
+# 5. Checks added in the ERE revision (Sections 4.3, 5, 6; Appendices C and D)
+python3 c1_multiplier_split.py          > logs/c1.log 2>&1      # shadow-price form of the split
+python3 c1b_three_term.py               > logs/c1b.log 2>&1     # direct + feedback + constraint term (Table 3)
+python3 c2_fair_reopt.py                > logs/c2.log 2>&1      # FaIR v2 sets re-optimized; ECS sweep under FaIR v2
+python3 c4_abatement_cost.py            > logs/c4.log 2>&1      # backstop price and cost curvature
+python3 c5_fixed_alpha_starts.py        > logs/c5.log 2>&1      # planner ignoring saturation, several starting paths
+python3 c9_misspecified_scc.py          > logs/c9.log 2>&1      # SCCs on that planner's own path (Table 5)
+python3 c6_pref_correlation.py 0.5 200  > logs/c6p.log 2>&1 & python3 c6_pref_correlation.py -0.5 200 > logs/c6m.log 2>&1; wait  # paper uses the first 111 draws of each
+python3 c6_summary.py                   > logs/c6s.log 2>&1     # numbers quoted in Section 6.3
+python3 c7_discrete_sign.py             > logs/c7.log 2>&1      # local sign rule in discrete time
+python3 c8_eq18_check.py                > logs/c8.log 2>&1      # Eq. 18, coupled vs frozen emissions
+
+# 6. Appendices F and G
 python3 onepointfive.py                 > logs/onepointfive.log 2>&1
 python3 gym_replay.py                   > logs/gym.log 2>&1
 
-# 6. Tables, macros and figures
-python3 make_tables.py && python3 make_tables_v3.py && python3 make_tables_v4.py && python3 mc_bound_check.py && python3 make_tables_v6.py && python3 make_tables_submission.py
-python3 fig_mc2.py && python3 fig_v4.py && python3 fig_v6.py && python3 fig_feedback_share.py
+# 7. Tables, macros and figures
+python3 make_tables.py && python3 make_tables_v3.py && python3 make_tables_v4.py && python3 mc_bound_check.py && python3 make_tables_v6.py && python3 make_tables_submission.py && python3 make_tables_v8.py && python3 widen_tables.py
+python3 fig_mc2.py && python3 fig_v4.py && python3 fig_v6.py && python3 fig_feedback_share.py && python3 fig_v8_policy.py
 python3 overlap_check.py                # collision check of every manuscript figure (expects TOTAL 0)
 python3 -m pytest -q tests

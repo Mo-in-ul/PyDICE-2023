@@ -1,12 +1,13 @@
-# PyDICE-2023, release 3.0: replication package for the SCC saturation-feedback paper
+# PyDICE-2023, release 3.1: replication package for the SCC saturation-feedback paper
 
 Python implementation of the DICE-2023 integrated assessment model (Barrage and Nordhaus 2024), verified against
 the ten published GAMS runs, with an exact decomposition of the social cost of carbon (SCC) into a direct part
 and the carbon-sink saturation feedback.
 
 This release contains the code and results behind the manuscript
-"How Much of the Social Cost of Carbon Comes from Carbon-Sink Saturation? Evidence from PyDICE-2023"
-(Md Moinul Islam and Matthew A. Oehlschlaeger).
+"Carbon-Sink Saturation and the Social Cost of Carbon: The Role of Optimal Mitigation"
+(Md Moinul Islam and Matthew A. Oehlschlaeger), submitted to Environmental and Resource Economics.
+Release 3.0 held an earlier version of this analysis.
 
 ## Layout
 
@@ -20,6 +21,10 @@ This release contains the code and results behind the manuscript
 - `paper_build/run_paper.sh`: reproduces every number in the manuscript, in dependency order.
 - `paper_build/fair_own_weights.py`, `jacobian_check.py`: the robustness checks of Appendices C and D (FaIR v2 sets with
   their own baseline welfare weights; the diagonal of the implicit-function Jacobian).
+- `paper_build/c1_*.py` to `c9_*.py`: the checks added in the journal revision (shadow-price and three-term split,
+  re-optimized FaIR v2 runs, abatement costs, the planner who ignores saturation, correlated preferences, the
+  discrete-time sign rule, Eq. 18). `make_tables_v8.py` and `widen_tables.py` write their tables; `tex/` and `figs/`
+  hold the table fragments and figures exactly as used in the submitted manuscript and supplement.
 
 ## Quick start
 

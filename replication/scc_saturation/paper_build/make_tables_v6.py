@@ -76,7 +76,7 @@ for key, lab_ in (('irC', '$\\sigma_C$ (yr/GtC)'), ('irT', '$\\sigma_T$ (yr/K)')
             v = f"{r['value']:.4f}".rstrip('0').rstrip('.') if key == 'irC' else f"{r['value']:.3f}".rstrip('0').rstrip('.')
             rows.append(f"\\quad {v} & {100 * r['fixed']['share_2025']:.1f} & {100 * r['reopt']['share_2025']:.1f} & {r['fixed']['feedback_2025']:.2f} & {r['reopt']['feedback_2025']:.2f} & {pp(r['physical_pp'])} & {pp(r['policy_pp'])} \\\\")
 w('tab_v6_ccsweep.tex', '\\begin{tabular}{lrrrrrr}\n\\toprule\n & \\multicolumn{2}{c}{Share (\\%)} & \\multicolumn{2}{c}{Feedback (\\$/tCO$_2$)} & \\multicolumn{2}{c}{Change (pp)} \\\\\n'
-  '\\cmidrule(lr){2-3}\\cmidrule(lr){4-5}\\cmidrule(lr){6-7}\nValue & Fixed & Re-opt. & Fixed & Re-opt. & Physical & Policy \\\\\n\\midrule\n' + '\n'.join(rows) + '\n\\bottomrule\n\\end{tabular}\n')
+  '\\cmidrule(lr){2-3}\\cmidrule(lr){4-5}\\cmidrule(lr){6-7}\nValue & Fixed & Re-opt. & Fixed & Re-opt. & Fixed policy & Policy \\\\\n\\midrule\n' + '\n'.join(rows) + '\n\\bottomrule\n\\end{tabular}\n')
 
 # FaIR audit (appendix C)
 A = load_json('fair_audit.json'); C = load_json('exp_c_fair_range.json')['sets']
@@ -106,13 +106,13 @@ from common import gams_session
 import fair_benchmark as FB
 p, b = gams_session(9)
 rows = [
-    ('Economy and policy runs', 'DICE-2023 GAMS session \\texttt{Putlong-4-3-10.gms} with \\texttt{FAIR-beta-4-3-1.gms}; the ten published runs solved in the published order, bounds carried between runs (Appendix~\\ref{app:repro})', '\\citet{Barrage2024}'),
+    ('Economy and policy runs', 'DICE-2023 GAMS session \\texttt{Putlong-4-3-10.gms} with \\texttt{FAIR-beta-4-3-1.gms}; the ten published runs solved in the published order, bounds carried between runs (Appendix~\\mref{app:repro})', '\\citet{Barrage2024}'),
     ('DFAIR carbon cycle', f"Shares {p['emshare0']}, {p['emshare1']}, {p['emshare2']}, {p['emshare3']}; lifetimes $10^6$, {p['tau1']}, {p['tau2']}, {p['tau3']} yr; $r_0$ {p['irf0']} yr, $\\sigma_C$ {p['irC']} yr/GtC, $\\sigma_T$ {p['irT']} yr/K; stocks in GtC, emissions in GtCO$_2$ divided by 3.667", 'GAMS program'),
     ('Initial state, 2020', f"$\\mat$ {p['mat0']:.1f} GtC ($\\meq$ {p['mateq']:.0f}); reservoirs {p['res00']}, {p['res10']}, {p['res20']}, {p['res30']} GtC; cumulative emissions {p['CumEmiss0']} GtC; temperature boxes {p['tbox10']} and {p['tbox20']:.4f}\\,\\textdegree C ($\\tatm$ {p['tatm0']:.3f}); capital {p['k0']} trillion 2019 \\$", 'GAMS program'),
     ('Bounds as in GAMS', '$\\tatm \\ge 0.5$\\,\\textdegree C; $0.1 \\le \\alpha \\le 100$; upper bounds on $\\mu$ by period; bounds set in earlier runs of the session', 'GAMS program'),
-    ('Bounds changed', 'Monte Carlo and Experiments A, B: $\\tatm \\ge 0.01$\\,\\textdegree C, solved with IPOPT on the unclamped model; floor on $\\alpha$ in the forward model 0.1 (the Numba default is 0.2); Experiment A: upper bound on $\\mu$ varied (Table~\\ref{tab:removal})', 'This paper'),
+    ('Bounds changed', 'Monte Carlo and the re-optimized runs of Sections~\\mref{sec:sign} and~\\mref{sec:physpol}: $\\tatm \\ge 0.01$\\,\\textdegree C, solved with IPOPT on the unclamped model; floor on $\\alpha$ 0.1, as in GAMS, in the forward model and the solvers; Section~\\mref{sec:sign}: upper bound on $\\mu$ varied (Table~\\mref{tab:removal})', 'This paper'),
     ('FaIR v2 substitution', f"\\texttt{{fair}} 2.2.5, CO$_2$ cycle only, annual steps; $\\alpha = g_0 \\exp(\\mathrm{{iIRF}}_{{100}}/g_1)$ with $g_0$ {FB.G0}, $g_1$ {FB.G1}; AR6: $r_0$ 29 yr, $r_U$ 0.00846, $r_A$ 0.000819 per GtCO$_2$, $r_T$ 4.0 yr/K; CMIP6 sets: Leach et al.\\ Table 3, $r_U$ and $r_A$ per GtC divided by 3.667; initial state: DICE-2023 2020 reservoirs and cumulative emissions converted to GtCO$_2$; DICE-2023 forcing, temperature model and optimal emissions", '\\citet{Leach2021}'),
-    ('Monte Carlo', '500 Latin hypercube draws, seed 2026, eight parameters sampled independently from the distributions of Table~\\ref{tab:mcdist}', 'This paper'),
+    ('Monte Carlo', '500 Latin hypercube draws, seed 2026, eight parameters sampled independently from the distributions of Table~\\mref{tab:mcdist}', 'This paper'),
 ]
 w('tab_v6_provenance.tex', '\\begin{tabular}{p{0.17\\textwidth}p{0.6\\textwidth}p{0.15\\textwidth}}\n\\toprule\nComponent & Setting & Source \\\\\n\\midrule\n'
   + '\n'.join(f"{a} & {b_} & {c} \\\\" for a, b_, c in rows) + '\n\\bottomrule\n\\end{tabular}\n')

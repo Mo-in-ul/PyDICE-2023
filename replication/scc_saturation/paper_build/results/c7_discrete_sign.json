@@ -1,0 +1,43 @@
+{
+ "9": {
+  "scenario": 9,
+  "periods": 80,
+  "agree_with_discrete_flux": 79,
+  "agree_with_continuous_rule": 79,
+  "disagree_years_discrete": [
+   2140
+  ],
+  "disagree_years_continuous": [
+   2140
+  ],
+  "first_negative_dM_dalpha": 2145,
+  "first_negative_flux": 2140,
+  "max_MAT_check": 0.001301399999874775
+ },
+ "4": {
+  "scenario": 4,
+  "periods": 80,
+  "agree_with_discrete_flux": 79,
+  "agree_with_continuous_rule": 80,
+  "disagree_years_discrete": [
+   2160
+  ],
+  "disagree_years_continuous": [],
+  "first_negative_dM_dalpha": 2165,
+  "first_negative_flux": 2160,
+  "max_MAT_check": 0.001301399999874775
+ },
+ "5": {
+  "scenario": 5,
+  "periods": 80,
+  "agree_with_discrete_flux": 79,
+  "agree_with_continuous_rule": 80,
+  "disagree_years_discrete": [
+   2185
+  ],
+  "disagree_years_continuous": [],
+  "first_negative_dM_dalpha": 2190,
+  "first_negative_flux": 2185,
+  "max_MAT_check": 0.001301399999874775
+ }
+}
