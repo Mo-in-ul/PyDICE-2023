@@ -15,6 +15,8 @@ The replication package for the elasticity letter ("Precautionary discounting re
 
 The replication package for "How Much of the Social Cost of Carbon Comes from Carbon-Sink Saturation? Evidence from PyDICE-2023" (release 3.0) is in `scc_saturation/`, with its own README.
 
+The replication package for "When Does Uncertain Carbon Removal Matter for Optimal Climate Policy?" is in `carbon_removal/`, with its own README.
+
 ## Contents
 
 ```
